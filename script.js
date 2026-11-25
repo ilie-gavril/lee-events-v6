@@ -542,7 +542,7 @@ window.addEventListener('keydown', event => {
 
 const sectionLinks = [
   ...navLinks,
-  ...document.querySelectorAll('.hero .scroll, .section-next .scroll, .hero-buttons a[href^="#"], .event-type-card a[data-event-type]')
+  ...document.querySelectorAll('.hero .scroll, .hero-buttons a[href^="#"], .event-type-card a[data-event-type]')
 ];
 sectionLinks.forEach(link => link.addEventListener('click', event => {
   if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -554,7 +554,7 @@ sectionLinks.forEach(link => link.addEventListener('click', event => {
   if (link.dataset.eventType) $('#offer-form select[name="tip"]').value = link.dataset.eventType;
   const bounds = section.getBoundingClientRect();
   const sectionTop = window.scrollY + bounds.top - header.offsetHeight;
-  const centerOffset = hash === '#contact' && !link.closest('.section-next')
+  const centerOffset = hash === '#contact'
     ? (bounds.height - (window.innerHeight - header.offsetHeight)) / 2
     : 0;
 
