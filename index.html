@@ -78,6 +78,16 @@
                 "@type": "Offer",
                 "itemOffered": {
                   "@type": "Service",
+                  "name": "Momente muzicale live",
+                  "provider": {
+                    "@id": "https://lee-events.ro/#lee-events"
+                  }
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
                   "name": "Sonorizare profesională",
                   "provider": {
                     "@id": "https://lee-events.ro/#lee-events"
@@ -122,8 +132,10 @@
         <section class="hero" id="acasa">
             <div class="hero-shade"></div>
             <div class="shell hero-inner">
+                <img class="hero-wordmark" src="assets/lee-events-wordmark.png" alt="Lee Events" width="1021"
+                    height="285">
                 <p class="kicker">DJ • MC • EVENT PRODUCTION</p>
-                <h1>Transformăm evenimentele în <em>experiențe memorabile.</em></h1>
+                <h1>Transformăm evenimentele în <mark class="title-highlight">experiențe memorabile.</mark></h1>
                 <p class="hero-desc">Muzică adaptată oamenilor, energie pe ringul de dans și atenție la fiecare detaliu.
                     Evenimentul tău merită atmosfera potrivită.</p>
                 <div class="hero-buttons"><a class="btn btn-light" href="#contact">Solicită o ofertă <svg
@@ -131,8 +143,8 @@
                             <rect x="3" y="4" width="18" height="16" rx="2" />
                             <circle cx="9" cy="10" r="2" />
                             <path d="M5.5 17c.5-2.3 2-3.5 3.5-3.5s3 1.2 3.5 3.5M15 10h4M15 14h4" />
-                        </svg></a><a class="btn btn-ghost" href="#instagram-gallery-title">Vezi atmosfera <svg
-                            class="ui-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        </svg></a><a class="btn btn-ghost" href="#galerie">Vezi atmosfera <svg class="ui-icon"
+                            viewBox="0 0 24 24" aria-hidden="true">
                             <rect x="3" y="3" width="18" height="18" rx="2" />.
                             <circle cx="8.5" cy="8.5" r="1.5" />
                             <path d="m21 16-5-5L5 21" />
@@ -160,7 +172,7 @@
                 <div class="about-photo"><img src="assets/dj-lee-portret.png" alt="DJ Lee, portret cu controller DJ"
                         loading="lazy" width="1004" height="1504"></div>
                 <div class="about-copy"><span class="eyebrow">DESPRE LEE EVENTS</span>
-                    <h2>Nu e doar despre muzică.<br><em>E despre atmosferă.</em></h2>
+                    <h2>Nu e doar despre muzică.<br>E despre <mark class="title-highlight">atmosferă.</mark></h2>
                     <p>Sunt DJ Lee și de peste 10 ani am ocazia să fiu parte din unele dintre cele mai frumoase momente
                         din viața oamenilor. Am trecut prin numeroase petreceri, am cunoscut publicuri diferite și am
                         învățat că fiecare eveniment are propriul ritm.</p>
@@ -178,16 +190,14 @@
         <section class="section services" id="servicii">
             <div class="shell">
                 <div class="section-title"><span class="eyebrow">SERVICII</span>
-                    <h2 class="section-heading">Tot ce trebuie pentru o <em>petrecere reușită.</em></h2>
+                    <h2 class="section-heading">Tot ce trebuie pentru o <mark class="title-highlight">petrecere reușită.</mark></h2>
                     <p>Servicii de DJ și MC pentru nunți, botezuri și evenimente private, adaptate locației și
                         programului petrecerii.</p>
                 </div>
                 <div class="service-grid">
                     <article class="service-card">
-                        <div class="service-icon"><svg viewBox="0 0 48 48" aria-hidden="true">
-                                <path
-                                    d="M8 29v-6a16 16 0 0 1 32 0v6M8 27h6v13H9a4 4 0 0 1-4-4v-5a4 4 0 0 1 3-4Zm26 0h6a4 4 0 0 1 3 4v5a4 4 0 0 1-4 4h-5V27Z" />
-                            </svg></div>
+                        <div class="service-icon"><img src="assets/services/headphones.svg" width="72" height="72"
+                                alt="" decoding="async"></div>
                         <h3>DJ</h3>
                         <p>Selecție muzicală open-format pentru nunți, botezuri și petreceri private, adaptată în timp
                             real invitaților și momentelor importante.
@@ -196,31 +206,32 @@
                             invitaților până la finalul petrecerii.</p>
                     </article>
                     <article class="service-card">
-                        <div class="service-icon"><svg viewBox="0 0 48 48" aria-hidden="true">
-                                <rect x="18" y="5" width="12" height="24" rx="6" />
-                                <path d="M12 22a12 12 0 0 0 24 0M24 34v9M16 43h16" />
-                            </svg></div>
+                        <div class="service-icon"><img src="assets/services/microphone.svg" width="72" height="72"
+                                alt="" decoding="async"></div>
                         <h3>MC Hosting</h3>
                         <p>Serviciul de MC pentru nunți și alte evenimente acoperă prezentarea momentelor importante,
                             anunțurile și interacțiunea cu invitații.</p>
                         <p>Comunicare discretă, fără intervenții forțate, pentru un eveniment care curge firesc.</p>
                     </article>
                     <article class="service-card">
-                        <div class="service-icon"><svg viewBox="0 0 48 48" aria-hidden="true">
-                                <rect x="12" y="4" width="24" height="40" rx="3" />
-                                <circle cx="24" cy="29" r="8" />
-                                <circle cx="24" cy="13" r="3" />
-                            </svg></div>
+                        <div class="service-icon"><img src="assets/services/music-note.svg" width="72" height="72"
+                                alt="" decoding="async"></div>
+                        <h3>Momente muzicale live</h3>
+                        <p>Energia muzicii mixate întâlnește autenticitatea interpretărilor live. Colaborăm cu
+                            soliști vocali și instrumentiști pentru a integra în programul artistic momente speciale,
+                            adaptate preferințelor tale și atmosferei evenimentului.</p>
+                    </article>
+                    <article class="service-card">
+                        <div class="service-icon"><img src="assets/services/speaker.svg" width="72" height="72" alt=""
+                                decoding="async"></div>
                         <h3>Sonorizare profesională</h3>
                         <p>Sonorizarea pentru eveniment se stabilește în funcție de spațiu, numărul de invitați și
                             desfășurarea petrecerii.</p>
                         <p>Sunet echilibrat pentru discursuri, momente speciale și ringul de dans.</p>
                     </article>
                     <article class="service-card">
-                        <div class="service-icon"><svg viewBox="0 0 48 48" aria-hidden="true">
-                                <path
-                                    d="M14 30h20l4 10H10l4-10ZM17 30V17h14v13M12 17h24M24 5v7M8 8l7 6M40 8l-7 6M6 25h7M35 25h7" />
-                            </svg></div>
+                        <div class="service-icon"><img src="assets/services/moving-head.svg" width="72" height="72"
+                                alt="" decoding="async"></div>
                         <h3>Lumini & efecte speciale</h3>
                         <p>Lumini dinamice și efecte vizuale pentru ringul de dans, adaptate spațiului și momentelor
                             petrecerii.</p>
@@ -232,16 +243,18 @@
             </div>
         </section>
         <section class="section event-types" id="evenimente" aria-labelledby="event-types-title">
-            <div class="shell" data-scroll-center>
+            <div class="shell">
                 <div class="event-types-intro">
                     <span class="eyebrow">TIPURI DE EVENIMENTE</span>
-                    <h2 class="section-heading" id="event-types-title">Fiecare eveniment are propriul ritm.</h2>
+                    <h2 class="section-heading" id="event-types-title">Fiecare eveniment are
+                        <span class="event-types-title-line"><mark class="title-highlight">propriul ritm.</mark></span>
+                    </h2>
                 </div>
                 <div class="event-types-grid">
                     <article class="event-type-card">
                         <div class="event-type-cover">
-                            <img src="assets/evenimente/nunta.jpg" alt="Miri dansând la petrecerea de nuntă" width="960"
-                                height="640" loading="lazy" decoding="async">
+                            <img src="assets/evenimente/nunta.webp" alt="Miri dansând la petrecerea de nuntă"
+                                width="960" height="640" loading="lazy" decoding="async">
                             <h3>Nuntă</h3>
                         </div>
                         <div class="event-type-body">
@@ -255,7 +268,7 @@
                     </article>
                     <article class="event-type-card">
                         <div class="event-type-cover">
-                            <img src="assets/evenimente/botez.jpg"
+                            <img src="assets/evenimente/botez.webp"
                                 alt="Părinți ținând bebelușul în brațe la petrecerea de botez" width="960" height="640"
                                 loading="lazy" decoding="async">
                             <h3>Botez</h3>
@@ -270,7 +283,7 @@
                     </article>
                     <article class="event-type-card">
                         <div class="event-type-cover">
-                            <img src="assets/evenimente/corporate.jpg"
+                            <img src="assets/evenimente/corporate.webp"
                                 alt="DJ la pupitru în timpul unei recepții corporate" width="960" height="640"
                                 loading="lazy" decoding="async">
                             <h3>Corporate</h3>
@@ -287,75 +300,201 @@
                 </div>
             </div>
         </section>
-        <section class="section gallery" id="galerie">
+        <section class="section gallery" id="galerie" aria-labelledby="gallery-title">
             <div class="shell">
-                <div data-scroll-center>
-                    <div class="section-title"><span class="eyebrow">GALERIE</span>
-                        <h2 class="section-heading">Atmosfera, <em>în imagini.</em></h2>
-                        <p>Fotografii de la evenimente. Descoperă atmosfera, cadru cu cadru.</p>
-                    </div>
-                    <div class="carousel gallery-carousel" data-carousel="gallery">
-                        <div class="carousel-viewport">
-                            <div class="carousel-track" id="gallery-track"></div>
-                        </div>
-                        <div class="carousel-controls"><button class="arrow" data-prev
-                                aria-label="Fotografia precedentă">←</button>
-                            <div class="dots" data-dots aria-label="Poziția în galerie"></div><button class="arrow"
-                                data-next aria-label="Fotografia următoare">→</button>
-                        </div>
+                <div class="gallery-intro">
+                    <span class="eyebrow">GALERIE</span>
+                    <h2 class="section-heading" id="gallery-title">Atmosfera, <mark class="title-highlight">în imagini.</mark></h2>
+                    <p>Momente reale. Emoții autentice. Descoperă atmosfera evenimentelor, dincolo de cuvinte.</p>
+                    <div class="gallery-filters" role="group" aria-label="Filtrează galeria">
+                        <button type="button" data-gallery-filter="image" aria-pressed="true"
+                            aria-controls="gallery-grid">Fotografii</button>
+                        <button type="button" data-gallery-filter="video" aria-pressed="false"
+                            aria-controls="gallery-grid">Video</button>
                     </div>
                 </div>
-                <section class="instagram-gallery" aria-labelledby="instagram-gallery-title">
-                    <div class="section-title">
-                        <span class="eyebrow">LEE EVENTS PE INSTAGRAM</span>
-                        <h3 class="section-heading" id="instagram-gallery-title">Atmosfera, așa cum a fost.</h3>
-                        <p>Momente reale, oameni frumoși și petreceri care vorbesc de la sine.</p>
-                    </div>
-                    <div class="instagram-grid" id="instagram-grid"></div>
-                    <div class="instagram-gallery-action">
-                        <a class="btn btn-ghost" href="https://www.instagram.com/lee.events.ro/" target="_blank"
-                            rel="noopener noreferrer">Vezi mai multe pe Instagram</a>
-                    </div>
-                    <dialog class="instagram-dialog" aria-labelledby="instagram-post-title">
-                        <div class="instagram-dialog-header">
-                            <h3 class="section-heading" id="instagram-post-title"></h3>
-                            <form method="dialog">
-                                <button type="submit" class="arrow" aria-label="Închide postarea" autofocus>×</button>
-                            </form>
-                        </div>
-                        <div class="instagram-stage" data-state="preview">
-                            <img class="instagram-preview" alt="">
-                            <div class="instagram-embed"></div>
-                        </div>
-                        <div class="instagram-dialog-footer">
-                            <p class="instagram-dialog-status" role="status"></p>
-                            <a class="btn btn-ghost instagram-direct" target="_blank" rel="noopener noreferrer">Deschide
-                                pe Instagram ↗</a>
-                        </div>
-                    </dialog>
-                </section>
+                <div class="gallery-grid" id="gallery-grid" data-media="image"></div>
+                <p class="gallery-empty" role="status" hidden></p>
+                <div class="gallery-actions">
+                    <a class="btn btn-ghost gallery-social" href="https://www.instagram.com/lee.events.ro/"
+                        target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                            <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor"
+                                stroke-width="1.7" />
+                            <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7" />
+                            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" />
+                        </svg>
+                        <span>Descoperă mai multe pe Instagram <small>@lee.events.ro</small></span>
+                    </a>
+                </div>
             </div>
-        </section>
-        <section class="section reviews" id="recenzii">
-            <div class="shell">
-                <div class="section-title"><span class="eyebrow">RECENZII</span>
-                    <h2 class="section-heading">Cuvintele celor care <em>au petrecut cu noi.</em></h2>
-
+            <dialog class="gallery-dialog gallery-lightbox" aria-labelledby="gallery-photo-title">
+                <button type="button" class="gallery-dialog-button gallery-close" aria-label="Închide fotografia"
+                    autofocus>×</button>
+                <button type="button" class="gallery-dialog-button gallery-prev"
+                    aria-label="Fotografia precedentă">←</button>
+                <div class="gallery-photo-stage"><img alt="" decoding="async"></div>
+                <button type="button" class="gallery-dialog-button gallery-next"
+                    aria-label="Fotografia următoare">→</button>
+                <div class="gallery-photo-caption" aria-live="polite" aria-atomic="true">
+                    <p class="gallery-photo-position"></p>
+                    <h3 id="gallery-photo-title"></h3>
+                    <p class="gallery-photo-description"></p>
                 </div>
-                <div class="carousel review-carousel">
-                    <div class="carousel-viewport">
-                        <div class="carousel-track" id="reviews-track" tabindex="0" role="region"
-                            aria-label="Recenziile clienților"></div>
-                    </div>
-                    <div class="carousel-controls">
-                        <a class="review-more" href="https://www.facebook.com/lee.events.ro/reviews/" target="_blank"
-                            rel="noopener noreferrer">Citește mai multe recenzii.</a>
-                        <div class="review-arrows">
-                            <button class="arrow" type="button" data-prev aria-controls="reviews-track"
-                                aria-label="Recenzia precedentă">←</button>
-                            <button class="arrow" type="button" data-next aria-controls="reviews-track"
-                                aria-label="Recenzia următoare">→</button>
+            </dialog>
+            <dialog class="gallery-dialog gallery-video" aria-labelledby="gallery-video-title">
+                <div class="gallery-video-header">
+                    <h3 id="gallery-video-title"></h3>
+                    <button type="button" class="gallery-dialog-button gallery-close" aria-label="Închide clipul"
+                        autofocus>×</button>
+                </div>
+                <div class="gallery-video-embed"></div>
+                <div class="gallery-video-footer">
+                    <p class="gallery-video-status" role="status"></p>
+                    <a class="btn btn-ghost gallery-video-link" target="_blank" rel="noopener noreferrer">Vezi pe
+                        Instagram</a>
+                </div>
+            </dialog>
+        </section>
+        <section class="section reviews" id="recenzii" aria-labelledby="reviews-title">
+            <div class="shell">
+                <div class="section-title reviews-intro">
+                    <span class="eyebrow">RECENZII</span>
+                    <h2 class="section-heading" id="reviews-title">Cuvintele celor care <mark class="title-highlight">au petrecut cu noi.</mark>
+                    </h2>
+                    <p>Oameni reali. Evenimente reale. Păreri sincere.</p>
+                </div>
+                <div class="reviews-fallback">
+                    <!-- reviews-fallback:start -->
+                    <article class="review-card">
+                        <blockquote>
+                            <p>Un DJ de nota 10! Se vede că pune suflet și pasiune în tot ceea ce face. Știe să simtă
+                                publicul, să aleagă muzica potrivită și să întrețină atmosfera de la început până la
+                                final. Profesionalism, energie pozitivă și mult talent! Noi știm deja cu cine vom
+                                colabora din nou pentru următoarea petrecere! Recomand cu mare drag și cu toată
+                                încrederea! Felicitări pentru ceea ce faci!.</p>
+                        </blockquote>
+                        <cite>Sergiu &amp; Raluca</cite>
+                        <p class="review-meta">Petrecere Botez, Iași</p>
+                    </article>
+                    <article class="review-card">
+                        <blockquote>
+                            <p>L-am avut pe Ilie ca DJ la petrecerea noastră de cununie civilă și pot spune că a fost
+                                una dintre cele mai bune alegeri. A reușit să țină ringul de dans plin de la început
+                                până la sfârșit și a pus muzică pentru toate gusturile. Super profesionist si atent la
+                                dorințele noastre. Mulțumim că ai contribuit la o seară pe care o vom ține minte cu
+                                drag! </p>
+                        </blockquote>
+                        <cite>Eduard &amp; Adelina</cite>
+                        <p class="review-meta">Petrecere cununie civilă, Iași</p>
+                    </article>
+                    <article class="review-card">
+                        <blockquote>
+                            <p>Cu mare drag recomand pe Ilie care in primul rând este un om cu un vibe foarte prietenos
+                                și cald, deschis să colaboreze pentru ca evenimentul tău să iasă așa cum ti ai dorit.
+                                Invitații s au distrat pe ritmuri folclorice, pop, anii 2000 și nu numai, de toate pt
+                                toți. La cât mai multe momente reușite îți dorim.</p>
+                        </blockquote>
+                        <cite>Florin &amp; Florentina</cite>
+                        <p class="review-meta">Nuntă, Iași</p>
+                    </article>
+                    <article class="review-card">
+                        <blockquote>
+                            <p>Am colaborat cu DJ LEE pentru evenimentul nostru și a fost o experiență excelentă! Muzica
+                                a fost perfect aleasă, atmosfera a fost întreținută tot timpul, iar invitații noștri au
+                                fost extrem de încântați. Profesionalism, punctualitate și flexibilitate – toate la
+                                superlativ. Recomand cu toată încrederea!</p>
+                        </blockquote>
+                        <cite>Ionuț &amp; Bianca</cite>
+                        <p class="review-meta">Petrecere botez, Iași</p>
+                    </article>
+                    <article class="review-card">
+                        <blockquote>
+                            <p>A înțeles perfect invitații, ce și când să pună, a trebuit să vorbim cu cei de la local
+                                sa ne mai lase să continuăm (peste timpul inițial agreat contractual). Sunet, lumini
+                                top, iar baghetele luminoase primite de la dj, vor fi un must de acum pentru mine, a
+                                fost foarte fun.</p>
+                        </blockquote>
+                        <cite>Daniel &amp; Bianca</cite>
+                        <p class="review-meta">Petrecere botez, Iași</p>
+                    </article>
+                    <article class="review-card">
+                        <blockquote>
+                            <p>A reușit să creeze o adevărată atmosferă de petrecere. Toți invitații au dansat și s-au
+                                simțiți foarte bine, a fost atent la gusturile noastre și ale invitaților. Este un
+                                adevărat profesionist și un om deosebit; mereu alături de noi cu un sfat sau o
+                                recomandare.</p>
+                        </blockquote>
+                        <cite>Robert &amp; Elena</cite>
+                        <p class="review-meta">Nuntă, Iași</p>
+                    </article>
+                    <article class="review-card">
+                        <blockquote>
+                            <p>Supeeer vibe! Dj Lee a avut grijă ca să avem cea mai faină muzică la petrecerea noastră
+                                de botez! De asemenea, am apreciat atenția față de preferințele muzicale ale invitaților
+                                și atitudinea pozitivă! Îl recomand cu drag!</p>
+                        </blockquote>
+                        <cite>Radu &amp; Ana-Maria</cite>
+                        <p class="review-meta">Petrecere botez, Iași</p>
+                    </article>
+                    <article class="review-card">
+                        <blockquote>
+                            <p>Dacă doriți sa aveți parte de o petrecere minunată, DJ Lee este alegerea perfecta!
+                                Colaborare excepțională, pasiune pentru muzică și atmosferă! Mulțumim din suflet, te
+                                recomandam cu mult drag! </p>
+                        </blockquote>
+                        <cite>Dănuț &amp; Raluca</cite>
+                        <p class="review-meta">Petrecere botez, Iași</p>
+                    </article>
+                    <article class="review-card">
+                        <blockquote>
+                            <p>Selectia pieselor absolut perfecta. Tranzitia intre piese a fost super smooth. Ne-a
+                                placut mult ca a stiut sa puna muzica pentru toti invitatii indiferent de varsta si
+                                zona. A fost perfect!</p>
+                        </blockquote>
+                        <cite>Andrei &amp; Sabina</cite>
+                        <p class="review-meta">Petrecere cununie civilă, Iași</p>
+                    </article>
+                    <article class="review-card">
+                        <blockquote>
+                            <p>Mulțumim mult pentru colaborare și atmosfera creată la botezul micuței noastre. Ne-am
+                                distrat pe cinste, ritmul muzicii mixate a fost pe gustul nostru. Ne revedem la
+                                următorul eveniment.</p>
+                        </blockquote>
+                        <cite>Sorin &amp; Andreea</cite>
+                        <p class="review-meta">Petrecere botez, Iași</p>
+                    </article>
+                    <article class="review-card">
+                        <blockquote>
+                            <p>Am avut parte de o petrecere de neuitat alături de Ilie. Muzica a fost pentru toate
+                                gusturile, iar Ilie a asigurat o atmosfera energizantă și plină de viață! Mulțumim
+                                pentru tot!</p>
+                        </blockquote>
+                        <cite>Sebastian &amp; Adina</cite>
+                        <p class="review-meta">Petrecere botez, Iași</p>
+                    </article>
+                    <!-- reviews-fallback:end -->
+                </div>
+                <div class="reviews-interactive" hidden>
+                    <div class="reviews-platforms" aria-label="Platforme de recenzii" hidden></div>
+                    <section class="review-spotlight" aria-label="Recenzii ale clienților">
+                        <svg class="review-wave" viewBox="0 0 480 190" fill="none" aria-hidden="true">
+                            <path
+                                d="M0 95H26L42 78L58 114L74 58L90 133L106 42L122 151L138 62L154 124L170 22L186 164L202 78L218 100L234 54L250 135L266 38L282 153L298 64L314 120L330 34L346 152L362 66L378 122L394 81L410 106L426 89L442 95H480"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <div class="review-spotlight-stage" id="review-spotlight-track" role="region"
+                            aria-label="Rând de recenzii cu derulare orizontală" tabindex="0"></div>
+                        <div class="review-spotlight-controls" hidden>
+                            <button class="review-arrow" type="button" data-review-step="-1"
+                                aria-controls="review-spotlight-track" aria-label="Recenzia precedentă"></button>
+                            <button class="review-arrow" type="button" data-review-step="1"
+                                aria-controls="review-spotlight-track" aria-label="Recenzia următoare"></button>
                         </div>
+                    </section>
+                    <div class="review-external" hidden>
+                        <p>Descoperă mai multe experiențe și pe platformele noastre.</p>
+                        <div class="review-external-links"></div>
                     </div>
                 </div>
             </div>
@@ -468,9 +607,10 @@
         <div class="shell">
             <div class="footer-inner">
                 <div class="footer-brand">
-                    <a href="#acasa"><img src="assets/lee-events-wordmark.png" alt="Lee Events" width="1021" height="285"
-                            loading="lazy"></a>
-                    <p>DJ și MC în Iași pentru nunți, botezuri și petreceri corporate, cu sonorizare și lumini adaptate evenimentului.</p>
+                    <a href="#acasa"><img src="assets/lee-events-wordmark.png" alt="Lee Events" width="1021"
+                            height="285" loading="lazy"></a>
+                    <p>DJ și MC în Iași pentru nunți, botezuri și petreceri corporate, cu sonorizare și lumini adaptate
+                        evenimentului.</p>
                 </div>
                 <nav class="footer-nav" aria-labelledby="footer-nav-title">
                     <h2 id="footer-nav-title">Explorează</h2>
@@ -492,9 +632,12 @@
                         </ul>
                     </address>
                     <ul class="footer-social" aria-label="Rețele sociale și mesagerie">
-                        <li><a href="https://www.instagram.com/lee.events.ro/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
-                        <li><a href="https://www.facebook.com/lee.events.ro" target="_blank" rel="noopener noreferrer">Facebook</a></li>
-                        <li><a href="https://wa.me/40747752366" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
+                        <li><a href="https://www.instagram.com/lee.events.ro/" target="_blank"
+                                rel="noopener noreferrer">Instagram</a></li>
+                        <li><a href="https://www.facebook.com/lee.events.ro" target="_blank"
+                                rel="noopener noreferrer">Facebook</a></li>
+                        <li><a href="https://wa.me/40747752366" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+                        </li>
                     </ul>
                 </div>
             </div>

@@ -1,4 +1,10 @@
 'use strict';
+document.addEventListener('contextmenu', event => {
+  if (event.target instanceof Element && event.target.closest('img, .event-type-cover, .gallery-tile, .about-photo')) {
+    event.preventDefault();
+  }
+});
+
 const $ = (selector, root = document) => root.querySelector(selector);
 const menu = $('#menu'), toggle = $('.hamburger');
 const navLinks = [...document.querySelectorAll('.menu a[href^="#"], .header-offer[href^="#"]')];
@@ -9,221 +15,268 @@ navLinks.forEach(link => link.addEventListener('click', () => {
   toggle.setAttribute('aria-label', 'Deschide meniul');
 }));
 $('#year').textContent = new Date().getFullYear();
-const content = window.LEE_CONTENT || { galerie: [], recenzii: [] };
+const content = window.LEE_CONTENT || { galleryItems: [], reviews: [] };
 function el(tag, cls, text) { const node = document.createElement(tag); if (cls) node.className = cls; if (text !== undefined) node.textContent = text; return node; }
-function buildGallery(item) {
-  const card = el('article', 'gallery-slide');
-  const img = el('img');
-  img.alt = item.alt ?? (item.titlu || 'Fotografie din galeria Lee Events');
-  img.loading = 'lazy';
-  if (item.width > 0 && item.height > 0) {
-    img.width = item.width;
-    img.height = item.height;
-  }
-  img.src = item.imagine;
-  img.addEventListener('error', () => { img.alt = 'Imagine indisponibilă – verifică fișierul în assets/gallery'; });
-  const label = el('div', 'gallery-caption');
-  label.append(el('strong', '', item.titlu || ''), el('span', '', item.descriere || ''));
-  card.append(img, label);
-  return card;
-}
-function buildReview(item) {
-  const card = el('article', 'review-slide');
-  const header = el('div', 'review-card-header');
-  const quote = el('span', 'review-quote-mark', '”');
-  quote.setAttribute('aria-hidden', 'true');
-  header.append(quote);
-  const rating = Math.max(0, Math.min(5, Math.floor(Number(item.stele) || 0)));
-  if (rating) {
-    const stars = el('span', 'stars', '★'.repeat(rating));
-    stars.setAttribute('role', 'img');
-    stars.setAttribute('aria-label', `${rating} din 5 stele`);
-    header.append(stars);
-  }
+const reviewIconPaths = {
+  left: 'M19 12H5m7 7-7-7 7-7',
+  right: 'M5 12h14m-7-7 7 7-7 7',
+  external: 'M7 17 17 7M7 7h10v10',
+  star: 'm12 3 2.8 5.7 6.3.9-4.5 4.4 1.1 6.2-5.7-3-5.7 3 1.1-6.2-4.5-4.4 6.3-.9Z'
+};
 
-  const author = el('div', 'review-author');
-  author.append(el('strong', '', item.nume || ''));
-  if (item.tipEveniment) author.append(el('small', '', item.tipEveniment));
-  card.append(header, el('blockquote', '', item.text || ''), author);
-  return card;
+function reviewIcon(name) {
+  const namespace = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(namespace, 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('class', 'ui-icon');
+  svg.setAttribute('aria-hidden', 'true');
+  const path = document.createElementNS(namespace, 'path');
+  path.setAttribute('d', reviewIconPaths[name]);
+  svg.append(path);
+  return svg;
 }
 
-function setupReviews(items) {
-  const root = $('.review-carousel');
-  const track = $('#reviews-track', root);
-  const controls = $('.review-arrows', root);
-  if (!items.length) {
-    track.append(el('p', 'empty', 'Momentan nu există recenzii de afișat.'));
-    controls.hidden = true;
-    return;
+function reviewPlatformLogo(platform) {
+  const image = el('img', 'review-platform-logo');
+  image.src = `assets/reviews/${platform}.svg`;
+  image.alt = '';
+  image.width = 22;
+  image.height = 22;
+  return image;
+}
+
+function reviewStars(rating) {
+  const stars = el('span', 'review-stars');
+  stars.setAttribute('role', 'img');
+  stars.setAttribute('aria-label', `${rating.toLocaleString('ro-RO')} din 5 stele`);
+  for (let i = 0; i < 5; i++) {
+    const star = el('span', 'review-star');
+    const fill = el('span', 'review-star-fill');
+    fill.style.width = `${Math.max(0, Math.min(1, rating - i)) * 100}%`;
+    fill.append(reviewIcon('star'));
+    star.append(reviewIcon('star'), fill);
+    stars.append(star);
+  }
+  return stars;
+}
+
+function reviewExternalLink(url, className) {
+  const link = el('a', className);
+  link.href = url;
+  link.target = '_blank';
+  link.rel = 'noopener noreferrer';
+  return link;
+}
+
+function setupReviews(items, platforms) {
+  const root = $('#recenzii');
+  if (!items.length) return;
+
+  const interactive = $('.reviews-interactive', root);
+  const intro = $('.reviews-intro', root);
+  const proof = $('.reviews-platforms', root);
+  const external = $('.review-external', root);
+  const externalLinks = $('.review-external-links', root);
+  const spotlight = $('.review-spotlight', root);
+  const stage = $('.review-spotlight-stage', root);
+  const controls = $('.review-spotlight-controls', root);
+  const prev = $('[data-review-step="-1"]', controls);
+  const next = $('[data-review-step="1"]', controls);
+  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const validRating = value => Number.isFinite(value) && value > 0 && value <= 5;
+  const platformNames = { google: 'Google', facebook: 'Facebook' };
+  const revealed = new WeakSet();
+
+  const revealObserver = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      revealObserver.unobserve(entry.target);
+      revealed.add(entry.target);
+      if (!motion.matches) entry.target.classList.add('review-revealed');
+    }
+  }, { threshold: .08 });
+
+  function observeReveal(node, delay = 0) {
+    if (revealed.has(node)) return;
+    node.style.setProperty('--review-delay', `${delay}ms`);
+    revealObserver.observe(node);
   }
 
-  const cards = items.map(buildReview);
-  track.append(...cards);
-  const prev = $('[data-prev]', controls);
-  const next = $('[data-next]', controls);
+  function renderPlatforms() {
+    for (const [key, name] of Object.entries(platformNames)) {
+      const { url, rating, recommendation, count: reviewCount } = platforms[key] || {};
+      const hasRating = validRating(rating);
+      const hasRecommendation = Number.isFinite(recommendation) && recommendation >= 0 && recommendation <= 100;
+      const hasCount = Number.isInteger(reviewCount) && reviewCount >= 0;
+
+      if (key !== 'facebook' && (hasRating || hasRecommendation || hasCount)) {
+        const platform = url ? reviewExternalLink(url, 'review-platform') : el('div', 'review-platform');
+        if (url) platform.setAttribute('aria-label', `Vezi recenziile pe ${name}`);
+        const label = el('span', 'review-platform-label');
+        label.append(reviewPlatformLogo(key), el('strong', '', name));
+        const details = el('span', 'review-platform-details');
+        if (hasRating) {
+          details.append(el('span', 'review-platform-number', `${rating.toLocaleString('ro-RO')} / 5`), reviewStars(rating));
+        }
+        if (hasRecommendation) details.append(el('span', '', `${recommendation}% recomandă`));
+        if (hasCount) details.append(el('span', '', `${reviewCount.toLocaleString('ro-RO')} ${reviewCount === 1 ? 'recenzie' : 'recenzii'}`));
+        platform.append(label);
+        if (details.childElementCount) platform.append(details);
+        proof.append(platform);
+      }
+
+      if (url) {
+        const link = reviewExternalLink(url, 'btn btn-ghost review-external-link');
+        link.append(reviewPlatformLogo(key), el('span', '', `Vezi recenziile pe ${name}`), reviewIcon('external'));
+        externalLinks.append(link);
+      }
+    }
+    proof.hidden = !proof.childElementCount;
+    external.hidden = !externalLinks.childElementCount;
+  }
+
+  function buildReview(item) {
+    const card = el('article', 'review-card');
+    const quote = el('blockquote');
+    const text = item.review || '';
+    quote.append(el('p', 'review-text', text));
+
+    const attribution = el('footer', 'review-attribution');
+    const avatar = el('span', 'review-avatar', item.initials || item.author?.split(/[\s&]+/).filter(Boolean).slice(0, 2).map(part => part[0]).join('') || '');
+    avatar.setAttribute('aria-hidden', 'true');
+    const byline = el('div', 'review-byline');
+    byline.append(el('cite', '', item.author));
+    const metadata = [item.eventType, item.location].filter(Boolean).join(' · ');
+    if (metadata) byline.append(el('p', 'review-meta', metadata));
+    attribution.append(avatar, byline);
+
+    const sourceName = item.source?.toLowerCase();
+    if (Object.hasOwn(platformNames, sourceName)) {
+      const source = item.sourceUrl ? reviewExternalLink(item.sourceUrl, 'review-source') : el('span', 'review-source');
+      source.setAttribute('aria-label', `Sursa: ${platformNames[sourceName]}`);
+      if (!item.sourceUrl) source.setAttribute('role', 'img');
+      source.append(reviewPlatformLogo(sourceName));
+      attribution.append(source);
+    }
+    if (validRating(item.rating)) attribution.append(reviewStars(item.rating));
+    card.append(quote, attribution);
+    return card;
+  }
 
   function updateControls() {
-    const max = track.scrollWidth - track.clientWidth;
-    controls.hidden = max <= 1;
-    prev.disabled = track.scrollLeft <= 1;
-    next.disabled = track.scrollLeft >= max - 1;
+    const maxScroll = stage.scrollWidth - stage.clientWidth;
+    controls.hidden = maxScroll <= 1;
+    prev.disabled = stage.scrollLeft <= 1;
+    next.disabled = stage.scrollLeft >= maxScroll - 1;
   }
 
   function move(direction) {
-    const step = cards[1].offsetLeft - cards[0].offsetLeft;
-    track.scrollBy({ left: step * direction });
+    if (!stage.children[1]) return;
+    const step = stage.children[1].offsetLeft - stage.children[0].offsetLeft;
+    stage.scrollBy({ left: direction * step, behavior: motion.matches ? 'instant' : 'smooth' });
   }
 
+  prev.append(reviewIcon('left'));
+  next.append(reviewIcon('right'));
   prev.addEventListener('click', () => move(-1));
   next.addEventListener('click', () => move(1));
-  track.addEventListener('scroll', updateControls, { passive: true });
-  window.addEventListener('resize', updateControls);
-  updateControls();
-}
-function setupCarousel(name, items, makeCard) {
-  const root = document.querySelector(`[data-carousel="${name}"]`);
-  const track = $('.carousel-track', root);
-  const dots = $('[data-dots]', root);
-  const count = items.length;
-  if (!count) {
-    track.append(el('p', 'empty', 'Momentan nu există elemente de afișat.'));
-    return;
-  }
-
-  const loop = count > 1;
-  const first = loop ? count : 0;
-  const cards = items.map(makeCard);
-  if (loop) {
-    for (let copy = 0; copy < 3; copy++) {
-      cards.forEach(card => {
-        const slide = copy === 1 ? card : card.cloneNode(true);
-        if (copy !== 1) slide.setAttribute('aria-hidden', 'true');
-        track.append(slide);
-      });
-    }
-  } else {
-    track.append(...cards);
-  }
-
-  const slides = [...track.children];
-  let index = first + Math.floor(count / 2);
-  const logicalIndex = position => (position - first + count) % count;
-  const buttons = items.map((_, i) => {
-    const dot = el('button', 'dot');
-    dot.type = 'button';
-    dot.setAttribute('aria-label', `Mergi la elementul ${i + 1}`);
-    dot.addEventListener('click', () => {
-      let target = first + i;
-      if (loop) {
-        target = [i, first + i, 2 * count + i].reduce((nearest, candidate) =>
-          Math.abs(candidate - index) < Math.abs(nearest - index) ? candidate : nearest, target);
-      }
-      go(target);
-    });
-    dots.append(dot);
-    return dot;
+  stage.addEventListener('scroll', updateControls, { passive: true });
+  stage.addEventListener('keydown', event => {
+    if (event.target !== stage || !['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+    event.preventDefault();
+    move(event.key === 'ArrowLeft' ? -1 : 1);
   });
 
-  function positionOf(slide) {
-    const left = slide.offsetLeft - track.offsetLeft;
-    return left + (slide.offsetWidth - track.clientWidth) / 2;
-  }
-
-  function markActive(position) {
-    index = position;
-    slides.forEach((slide, i) => slide.classList.toggle('is-active', i === position));
-    buttons.forEach((button, i) => {
-      const active = i === logicalIndex(position);
-      button.classList.toggle('active', active);
-      button.setAttribute('aria-current', String(active));
-    });
-  }
-
-  function go(position) {
-    if (loop && (position < 0 || position >= slides.length)) {
-      const equivalent = first + logicalIndex(index);
-      position += equivalent - index;
-      track.scrollTo({ left: positionOf(slides[equivalent]), behavior: 'instant' });
-    }
-    const target = (position + slides.length) % slides.length;
-    markActive(target);
-    track.scrollTo({ left: positionOf(slides[target]), behavior: 'smooth' });
-  }
-
-  function settle() {
-    clearTimeout(timer);
-    const left = track.scrollLeft;
-    const nearest = slides.reduce((best, slide, i) =>
-      Math.abs(positionOf(slide) - left) < Math.abs(positionOf(slides[best]) - left) ? i : best, 0);
-    const target = loop ? first + logicalIndex(nearest) : nearest;
-    if (target !== nearest) {
-      track.scrollTo({ left: positionOf(slides[target]), behavior: 'instant' });
-    }
-    markActive(target);
-  }
-
-  root.querySelector('[data-prev]').addEventListener('click', () => go(index - 1));
-  root.querySelector('[data-next]').addEventListener('click', () => go(index + 1));
-  let timer;
-  if ('onscrollend' in track) {
-    track.addEventListener('scrollend', settle);
-  } else {
-    track.addEventListener('scroll', () => {
-      clearTimeout(timer);
-      timer = setTimeout(settle, 150);
-    }, { passive: true });
-  }
-  markActive(index);
-  track.scrollTo({ left: positionOf(slides[index]), behavior: 'instant' });
+  renderPlatforms();
+  interactive.hidden = false;
+  const ordered = [...items].sort((first, second) =>
+    [...second.review].length - [...first.review].length
+  );
+  stage.replaceChildren(...ordered.map(buildReview));
+  updateControls();
+  $('.reviews-fallback', root).hidden = true;
+  new ResizeObserver(updateControls).observe(stage);
+  observeReveal(intro);
+  if (!proof.hidden) observeReveal(proof, 75);
+  observeReveal(spotlight, 100);
 }
-setupCarousel('gallery', content.galerie || [], buildGallery);
-setupReviews(content.recenzii || []);
 
-function instagramPost(item) {
-  if (!item || typeof item.thumbnail !== 'string' || typeof item.title !== 'string') return null;
-  const thumbnail = item.thumbnail.trim();
-  const title = item.title.trim();
-  if (!title || !/^assets\/(?:[^/?#:\\]+\/)*[^/?#:\\]+\.(?:webp|jpe?g)$/i.test(thumbnail) ||
-    thumbnail.split('/').some(segment => segment === '.' || segment === '..')) return null;
-
+function galleryInstagramUrl(value) {
+  if (!value) return null;
   try {
-    const url = new URL(item.url);
-    const match = url.pathname.match(/^\/(p|reel)\/([\w-]+)\/?$/);
-    if (!match || !['https://www.instagram.com', 'https://instagram.com'].includes(url.origin)) return null;
-    return {
-      thumbnail, title,
-      url: `https://www.instagram.com/${match[1]}/${match[2]}/`,
-      reel: item.type === 'reel' || match[1] === 'reel'
-    };
+    const url = new URL(value);
+    const post = url.pathname.match(/^\/(p|reel)\/([\w-]+)\/?$/);
+    if (!post || !['https://www.instagram.com', 'https://instagram.com'].includes(url.origin)) return null;
+    return `https://www.instagram.com/${post[1]}/${post[2]}/`;
   } catch {
     return null;
   }
 }
 
-function setupInstagram(items) {
-  const gallery = $('.instagram-gallery');
-  const posts = items.map(instagramPost).filter(Boolean);
-  if (!gallery || !posts.length) return;
+function setupGallery(config) {
+  const root = $('#galerie');
+  const grid = $('#gallery-grid', root);
+  const empty = $('.gallery-empty', root);
+  const filters = [...root.querySelectorAll('[data-gallery-filter]')];
+  const instagramIcon = $('.gallery-social svg', root);
+  const photo = $('.gallery-lightbox', root);
+  const photoImage = $('.gallery-photo-stage img', photo);
+  const photoStage = photoImage.parentElement;
+  const photoTitle = $('#gallery-photo-title', photo);
+  const photoDescription = $('.gallery-photo-description', photo);
+  const photoPosition = $('.gallery-photo-position', photo);
+  const prev = $('.gallery-prev', photo);
+  const next = $('.gallery-next', photo);
+  const video = $('.gallery-video', root);
+  const videoTitle = $('#gallery-video-title', video);
+  const embed = $('.gallery-video-embed', video);
+  const videoStatus = $('.gallery-video-status', video);
+  const videoLink = $('.gallery-video-link', video);
+  const items = config.flatMap(item => {
+    if (item.type === 'image' && item.src) return [item];
+    const instagramUrl = item.type === 'video' && galleryInstagramUrl(item.instagramUrl);
+    return instagramUrl && item.thumbnail ? [{ ...item, instagramUrl }] : [];
+  });
 
-  const grid = $('#instagram-grid', gallery);
-  const dialog = $('.instagram-dialog', gallery);
-  const title = $('#instagram-post-title', dialog);
-  const stage = $('.instagram-stage', dialog);
-  const preview = $('.instagram-preview', dialog);
-  const embed = $('.instagram-embed', dialog);
-  const status = $('.instagram-dialog-status', dialog);
-  const direct = $('.instagram-direct', dialog);
-  let scriptReady;
-  let activeEmbed;
-  let observer;
-  let frameObserver;
-  let timeout;
+  let filtered = [];
+  let photos = [];
+  let position = 0;
+  let opener;
+  let swipe;
+  let instagramScript;
+  let embedObserver;
+  let embedTimeout;
+  let activePost;
+  const observer = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      entry.target.classList.add('gallery-reveal');
+      observer.unobserve(entry.target);
+    }
+  }, { threshold: .12 });
 
-  function loadScript() {
-    if (window.instgrm?.Embeds?.process) return Promise.resolve();
-    if (!scriptReady) {
-      scriptReady = new Promise((resolve, reject) => {
+  function showPhoto() {
+    const item = photos[position];
+    photo.classList.toggle('is-portrait', item.height > item.width);
+    photoImage.alt = item.alt || item.title || '';
+    photoImage.width = item.width || 0;
+    photoImage.height = item.height || 0;
+    photoImage.src = item.src;
+    photoTitle.textContent = item.title || item.alt || 'Fotografie';
+    photoDescription.textContent = item.description || '';
+    photoPosition.textContent = [position + 1, photos.length].map(value =>
+      String(value).padStart(2, '0')).join(' / ');
+    prev.hidden = next.hidden = photos.length < 2;
+  }
+
+  function movePhoto(direction) {
+    position = (position + direction + photos.length) % photos.length;
+    showPhoto();
+  }
+
+  function loadInstagramScript() {
+    if (!instagramScript) {
+      instagramScript = new Promise((resolve, reject) => {
         const script = el('script');
         script.async = true;
         script.src = 'https://www.instagram.com/embed.js';
@@ -232,113 +285,266 @@ function setupInstagram(items) {
         document.head.append(script);
       });
     }
-    return scriptReady;
+    return instagramScript;
   }
 
-  function openPost(post) {
-    observer?.disconnect();
-    frameObserver?.disconnect();
-    clearTimeout(timeout);
-    title.textContent = post.title;
-    stage.dataset.state = 'preview';
-    preview.src = post.thumbnail;
-    direct.href = post.url;
-    status.textContent = 'Se încarcă postarea Instagram…';
+  function showVideo(item) {
+    videoTitle.textContent = item.title || 'Clip Instagram';
+    videoLink.href = item.instagramUrl;
+    videoStatus.textContent = 'Se încarcă postarea Instagram…';
     const quote = el('blockquote', 'instagram-media');
-    quote.dataset.instgrmPermalink = post.url + '?utm_source=ig_embed&utm_campaign=loading';
+    quote.dataset.instgrmPermalink = item.instagramUrl;
     quote.dataset.instgrmVersion = '14';
-    const link = el('a');
-    link.href = post.url;
-    link.textContent = 'Vezi această postare pe Instagram';
-    quote.append(link);
     embed.replaceChildren(quote);
-    activeEmbed = quote;
-    dialog.showModal();
+    activePost = quote;
+    video.showModal();
 
     function unavailable() {
-      if (activeEmbed !== quote || !dialog.open) return;
-      clearTimeout(timeout);
-      status.textContent = 'Dacă postarea nu apare aici, o poți deschide direct pe Instagram.';
+      if (activePost !== quote || !video.open) return;
+      videoStatus.textContent = 'Postarea poate fi deschisă direct pe Instagram.';
     }
 
-    observer = new MutationObserver(() => {
+    embedObserver = new MutationObserver(() => {
       const frame = embed.querySelector('iframe');
-      if (activeEmbed !== quote || !dialog.open || !frame) return;
-      observer.disconnect();
+      if (!frame) return;
+      embedObserver.disconnect();
       frame.addEventListener('load', () => {
-        if (activeEmbed !== quote || !dialog.open) return;
-        function revealEmbed() {
-          if (activeEmbed !== quote || !dialog.open) return;
-          // Instagram can load a collapsed frame when a post cannot be embedded.
-          if (frame.getBoundingClientRect().height <= 2) {
-            unavailable();
-            return;
-          }
-          frameObserver?.disconnect();
-          clearTimeout(timeout);
-          stage.dataset.state = 'ready';
-          status.textContent = '';
+        if (activePost !== quote || !video.open) return;
+        if (frame.getBoundingClientRect().height > 2) {
+          clearTimeout(embedTimeout);
+          videoStatus.textContent = '';
         }
-        frameObserver = new ResizeObserver(revealEmbed);
-        frameObserver.observe(frame);
-        revealEmbed();
       }, { once: true });
     });
-    observer.observe(embed, { childList: true, subtree: true });
-    timeout = setTimeout(unavailable, 8000);
-    loadScript().then(() => {
-      if (activeEmbed === quote && dialog.open) window.instgrm.Embeds.process();
+    embedObserver.observe(embed, { childList: true, subtree: true });
+    embedTimeout = setTimeout(unavailable, 8000);
+    loadInstagramScript().then(() => {
+      if (activePost === quote && video.open) window.instgrm.Embeds.process();
     }).catch(unavailable);
   }
 
-  dialog.addEventListener('close', () => {
-    if (dialog.open) return;
-    activeEmbed = null;
-    observer?.disconnect();
-    frameObserver?.disconnect();
-    clearTimeout(timeout);
-    embed.replaceChildren();
-    preview.removeAttribute('src');
-    direct.removeAttribute('href');
-  });
+  function makeTile(item) {
+    const tile = el('button', 'gallery-tile');
+    tile.type = 'button';
+    tile.dataset.layout = item.layout || 'standard';
+    tile.setAttribute('aria-haspopup', 'dialog');
+    const title = item.title || item.alt || (item.type === 'video' ? 'Clip Instagram' : 'Fotografie');
+    tile.setAttribute('aria-label', `Deschide: ${title}`);
 
-  const cards = posts.map(post => {
-    const card = el('button', 'instagram-card');
-    card.type = 'button';
-    card.setAttribute('aria-haspopup', 'dialog');
     const image = el('img');
-    image.alt = '';
-    image.loading = 'lazy';
+    image.alt = item.alt || title;
     image.decoding = 'async';
-    image.src = post.thumbnail;
-    card.append(image);
-    if (post.reel) {
-      const play = el('span', 'instagram-play');
-      play.setAttribute('aria-hidden', 'true');
-      card.append(play);
+    image.loading = 'lazy';
+    image.width = item.width || 960;
+    image.height = item.height || 640;
+    if (item.srcset) {
+      image.sizes = item.layout === 'featured'
+        ? 'auto, (max-width: 720px) 94vw, (max-width: 980px) 64vw, 285px'
+        : 'auto, (max-width: 720px) 46vw, (max-width: 980px) 32vw, 380px';
+      image.srcset = item.srcset;
     }
-    card.append(el('span', 'instagram-card-title', post.title));
-    card.addEventListener('click', () => openPost(post));
-    return card;
+    image.src = item.thumbnail || item.src;
+    tile.append(image);
+
+    const overlay = el('span', 'gallery-tile-overlay');
+    overlay.setAttribute('aria-hidden', 'true');
+    overlay.append(el('span', '', title));
+    if (item.type === 'video') {
+      const play = el('span', 'gallery-play');
+      play.setAttribute('aria-hidden', 'true');
+      const badge = el('span', 'gallery-instagram-badge');
+      badge.setAttribute('aria-hidden', 'true');
+      badge.append(instagramIcon.cloneNode(true));
+      tile.append(play, badge);
+      if (item.duration) tile.append(el('span', 'gallery-duration', item.duration));
+    } else {
+      overlay.append(el('span', 'gallery-expand', '↗'));
+    }
+    tile.append(overlay);
+    tile.addEventListener('click', () => {
+      opener = tile;
+      if (item.type === 'video') {
+        showVideo(item);
+        return;
+      }
+      photos = filtered;
+      position = photos.indexOf(item);
+      showPhoto();
+      photo.showModal();
+    });
+    observer.observe(tile);
+    return tile;
+  }
+
+  function renderGallery(type) {
+    filtered = items.filter(item => item.type === type);
+    grid.dataset.media = type;
+    observer.disconnect();
+    grid.replaceChildren(...filtered.map(makeTile));
+    empty.hidden = filtered.length > 0;
+    empty.textContent = type === 'video'
+      ? 'Momentan nu există clipuri în galerie.'
+      : 'Momentan nu există fotografii în galerie.';
+  }
+
+  filters.forEach(button => button.addEventListener('click', () => {
+    if (button.getAttribute('aria-pressed') === 'true') return;
+    filters.forEach(filter => filter.setAttribute('aria-pressed', String(filter === button)));
+    renderGallery(button.dataset.galleryFilter);
+  }));
+  renderGallery('image');
+
+  function clearVideo() {
+    activePost = null;
+    embedObserver?.disconnect();
+    clearTimeout(embedTimeout);
+    embed.replaceChildren();
+    videoLink.removeAttribute('href');
+    videoStatus.textContent = '';
+  }
+
+  function closeDialog(dialog) {
+    if (dialog === video) clearVideo();
+    dialog.close();
+    opener?.focus({ preventScroll: true });
+  }
+
+  for (const dialog of [photo, video]) {
+    $('.gallery-close', dialog).addEventListener('click', () => closeDialog(dialog));
+    dialog.addEventListener('cancel', event => {
+      event.preventDefault();
+      closeDialog(dialog);
+    });
+    dialog.addEventListener('click', event => {
+      if (event.target === dialog || event.target === photoStage) closeDialog(dialog);
+    });
+    dialog.addEventListener('close', () => {
+      if (dialog.open) return;
+      opener?.focus({ preventScroll: true });
+    });
+  }
+
+  prev.addEventListener('click', () => movePhoto(-1));
+  next.addEventListener('click', () => movePhoto(1));
+  photoImage.addEventListener('load', () => {
+    photo.classList.toggle('is-portrait', photoImage.naturalHeight > photoImage.naturalWidth);
   });
-  grid.append(...cards);
+  photo.addEventListener('keydown', event => {
+    if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+    event.preventDefault();
+    movePhoto(event.key === 'ArrowLeft' ? -1 : 1);
+  });
+  photoStage.addEventListener('touchstart', event => {
+    swipe = event.touches.length === 1 ? event.touches[0] : null;
+  }, { passive: true });
+  photoStage.addEventListener('touchend', event => {
+    if (!swipe) return;
+    const { clientX, clientY } = event.changedTouches[0];
+    const horizontal = clientX - swipe.clientX;
+    const vertical = clientY - swipe.clientY;
+    swipe = null;
+    if (Math.abs(horizontal) > 45 && Math.abs(horizontal) > Math.abs(vertical)) {
+      movePhoto(horizontal > 0 ? -1 : 1);
+    }
+  }, { passive: true });
+  photoStage.addEventListener('touchcancel', () => { swipe = null; });
+  photo.addEventListener('close', () => { swipe = null; });
+
+  video.addEventListener('close', () => {
+    if (!video.open && activePost) clearVideo();
+  });
 }
 
-setupInstagram(Array.isArray(content.instagram) ? content.instagram : []);
+setupGallery(content.galleryItems || []);
+setupReviews(content.reviews || [], content.reviewPlatforms || {});
 $('#offer-form').addEventListener('submit', event => { event.preventDefault(); const f = new FormData(event.currentTarget); const msg = `Bună! Aș dori o ofertă, Lee Events. \nNume: ${f.get('nume')}\nEveniment: ${f.get('tip')}\nData: ${f.get('data')}\nLocalitatea: ${f.get('localitate')}\nDetalii: ${f.get('detalii') || '-'}`; window.open('https://wa.me/40747752366?text=' + encodeURIComponent(msg), '_blank', 'noopener,noreferrer'); });
 
 // Meniu fix și indicator activ sincronizat cu secțiunea vizibilă.
 const header = $('.header');
 const sections = navLinks.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
-function updateNavigation() { header.classList.toggle('is-scrolled', window.scrollY > 24); const probe = (header.offsetHeight + window.innerHeight) / 2; let current = sections[0]?.id; for (const section of sections) { if (section.getBoundingClientRect().top <= probe) current = section.id; } navLinks.forEach(link => { const active = link.getAttribute('href') === '#' + current; link.classList.toggle('active', active); if (active) link.setAttribute('aria-current', 'location'); else link.removeAttribute('aria-current'); }); }
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const headerControls = [menu, toggle, $('.header-offer', header)];
+const headerAnimations = new WeakMap();
+
+function updateHeader() {
+  const scrolled = window.scrollY > 24;
+  if (header.classList.contains('is-scrolled') === scrolled) return;
+
+  const initialPositions = headerControls.map(control => control.getBoundingClientRect().left);
+  header.classList.toggle('is-scrolled', scrolled);
+
+  headerControls.forEach((control, index) => {
+    headerAnimations.get(control)?.cancel();
+    if (reducedMotion.matches) return;
+    const distance = initialPositions[index] - control.getBoundingClientRect().left;
+    if (Math.abs(distance) < 1) return;
+    headerAnimations.set(control, control.animate(
+      [{ translate: `${distance}px 0` }, { translate: '0px 0' }],
+      { duration: 500, easing: 'cubic-bezier(.22, 1, .36, 1)' }
+    ));
+  });
+}
+
+function updateNavigation() {
+  updateHeader();
+  const probe = (header.offsetHeight + window.innerHeight) / 2;
+  let current = sections[0]?.id;
+  for (const section of sections) {
+    if (section.getBoundingClientRect().top <= probe) current = section.id;
+  }
+  navLinks.forEach(link => {
+    const active = link.getAttribute('href') === '#' + current;
+    link.classList.toggle('active', active);
+    if (active) link.setAttribute('aria-current', 'location');
+    else link.removeAttribute('aria-current');
+  });
+}
 window.addEventListener('scroll', updateNavigation, { passive: true });
 window.addEventListener('resize', updateNavigation);
 
-const centeredLinks = [
+let sectionScrollFrame = null;
+
+function cancelSectionScroll() {
+  if (sectionScrollFrame === null) return;
+  cancelAnimationFrame(sectionScrollFrame);
+  sectionScrollFrame = null;
+}
+
+function scrollToSection(top) {
+  cancelSectionScroll();
+  const start = window.scrollY;
+  const limit = document.documentElement.scrollHeight - window.innerHeight;
+  const target = Math.max(0, Math.min(top, limit));
+  const distance = target - start;
+  if (reducedMotion.matches || Math.abs(distance) < 2) {
+    window.scrollTo({ top: target, behavior: 'instant' });
+    return;
+  }
+
+  const duration = Math.min(1150, 420 + Math.sqrt(Math.abs(distance)) * 11);
+  const startTime = performance.now();
+  function move(now) {
+    const progress = Math.min(1, (now - startTime) / duration);
+    const eased = progress ** 3 * (progress * (progress * 6 - 15) + 10);
+    window.scrollTo({ top: start + distance * eased, behavior: 'instant' });
+    sectionScrollFrame = progress < 1 ? requestAnimationFrame(move) : null;
+  }
+  sectionScrollFrame = requestAnimationFrame(move);
+}
+
+window.addEventListener('wheel', cancelSectionScroll, { passive: true });
+window.addEventListener('touchstart', cancelSectionScroll, { passive: true });
+window.addEventListener('popstate', cancelSectionScroll);
+const scrollKeys = new Set(['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' ']);
+window.addEventListener('keydown', event => {
+  if (scrollKeys.has(event.key)) cancelSectionScroll();
+});
+
+const sectionLinks = [
   ...navLinks,
-  ...document.querySelectorAll('.hero-buttons a[href="#contact"], .event-type-card a[data-event-type]')
+  ...document.querySelectorAll('.hero .scroll, .hero-buttons a[href^="#"], .event-type-card a[data-event-type]')
 ];
-centeredLinks.forEach(link => link.addEventListener('click', event => {
+sectionLinks.forEach(link => link.addEventListener('click', event => {
   if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
   const hash = link.getAttribute('href');
   const section = document.querySelector(hash);
@@ -346,15 +552,15 @@ centeredLinks.forEach(link => link.addEventListener('click', event => {
 
   event.preventDefault();
   if (link.dataset.eventType) $('#offer-form select[name="tip"]').value = link.dataset.eventType;
-  const scrollTarget = $('[data-scroll-center]', section) || section;
-  const bounds = scrollTarget.getBoundingClientRect();
-  const visibleCenter = (header.offsetHeight + window.innerHeight) / 2;
-  const sectionCenter = window.scrollY + bounds.top + bounds.height / 2;
-  const top = sectionCenter - visibleCenter;
+  const bounds = section.getBoundingClientRect();
+  const sectionTop = window.scrollY + bounds.top - header.offsetHeight;
+  const centerOffset = hash === '#contact'
+    ? (bounds.height - (window.innerHeight - header.offsetHeight)) / 2
+    : 0;
 
   if (location.hash !== hash) history.pushState(null, '', hash);
   if (!section.hasAttribute('tabindex')) section.setAttribute('tabindex', '-1');
   section.focus({ preventScroll: true });
-  window.scrollTo({ top });
+  scrollToSection(sectionTop + centerOffset);
 }));
 updateNavigation();

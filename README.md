@@ -2,23 +2,52 @@
 
 Site static, fără instalări sau dependențe externe. Deschide `index.html` în browser sau folderul în VS Code și folosește Live Server.
 
-## Galerie – cum adaugi fotografii
-1. Copiază imaginile tale în `assets/gallery/` (ideal WebP/JPG, 1200px lățime).
-2. Deschide `content.js`.
-3. În lista `galerie`, adaugă o intrare cu calea fișierului, titlul și descrierea. Completează `alt` cu o descriere scurtă a ceea ce se vede în fotografie și, dacă le cunoști, adaugă dimensiunile reale în pixeli în `width` și `height`. Actualizează aceste trei câmpuri când înlocuiești o imagine demonstrativă.
-4. Șterge fotografiile demonstrative dacă nu le dorești.
+## Galerie – fotografii și Reel-uri
 
-## Recenzii – cum adaugi testimoniale
-În lista `recenzii` din `content.js`, completează numele, textul exact al recenziei, tipul evenimentului și numărul de stele.
+Editează lista `galleryItems` din `content.js`. Ordinea intrărilor stabilește ordinea în grilă. Folosește un `id` unic și alege `layout` dintre `featured`, `wide`, `tall` și `standard`. Folosește `featured` pentru fotografia principală. Galeria afișează toate elementele configurate în fila corespunzătoare, „Fotografii” sau „Video”.
+
+### Fotografie
+
+Salvează miniatura și imaginea de rezoluție mare în `assets/gallery/`. Pentru miniaturi poți furniza variante WebP și câmpul opțional `srcset`. Completează dimensiunile reale ale imaginii mari în `width` și `height`.
 
 ```js
-{ nume: 'Maria P.', text: 'Textul exact al recenziei', tipEveniment: 'Nuntă', stele: 5 },
+{
+  id: 'nunta-01', type: 'image', layout: 'wide',
+  title: 'Primul dans',
+  description: 'Mirii deschid ringul de dans.',
+  alt: 'Mirii dansează în mijlocul invitaților',
+  thumbnail: 'assets/gallery/nunta-01-960.webp',
+  src: 'assets/gallery/nunta-01-large.webp',
+  srcset: 'assets/gallery/nunta-01-480.webp 480w, assets/gallery/nunta-01-960.webp 960w',
+  width: 1920, height: 1080
+},
 ```
+
+### Reel sau postare Instagram
+
+Salvează o miniatură locală în `assets/instagram/` și completează `instagramUrl` cu linkul public al postării sau al Reel-ului, din categoria `/p/` sau `/reel/`. Adaugă opțional `duration` și `alt`. Intrarea apare după completarea unui URL valid.
+
+```js
+{
+  id: 'reel-nunta-01', type: 'video', layout: 'tall',
+  title: 'Din spatele pupitrului',
+  thumbnail: 'assets/instagram/reel-nunta-01.webp',
+  instagramUrl: '', duration: '0:32'
+},
+```
+
+## Recenzii – conținut, Spotlight și platforme
+
+Editează lista `reviews` din `content.js`. Fiecare recenzie are un `id` unic, numele clientului în `author`, tipul în `eventType` și textul original în `review`. Spotlight afișează recenziile în ordine descrescătoare după numărul de caractere din text. Toate recenziile rămân accesibile prin derulare.
+- Completează opțional `initials`, `location`, `source` (Google sau Facebook), `sourceUrl` și `rating` (1–5) când datele originale sunt disponibile. Câmpurile `date` și `photo` pot fi stocate pentru utilizare ulterioară.
+- Păstrează formatul JSON al listei, cu ghilimele duble și fără virgulă după ultima intrare. După modificări, rulează `python3 tools/sync-reviews.py` pentru a actualiza varianta statică din pagină, folosită la indexare și când JavaScript este dezactivat.
+
+Pentru ratingurile platformelor, editează `reviewPlatforms` în același fișier. `url` conține linkul public oficial, `rating` media din 5, `count` numărul de recenzii și `recommendation` procentul de recomandare, dacă platforma îl publică. Lasă valorile necunoscute la `null` și linkurile neconfirmate la șirul gol.
 
 ## Alte modificări
 - Culori și dimensiuni: `styles.css`.
 - Textele secțiunilor și serviciilor: `index.html`.
-- Comportament carusele, meniu și formular: `script.js`.
+- Comportament galerie, recenzii, meniu și formular: `script.js`.
 - Logo simplificat: `assets/lee-events-wordmark.png` (extras orientativ din captura furnizată; pentru cea mai bună calitate înlocuiește cu un SVG/PNG transparent original).
 - Fundal hero: `assets/ambient-bg.webp` (derivat și estompat din captura furnizată; înlocuiește cu o fotografie reală fără text pentru un rezultat optim).
 
