@@ -161,6 +161,19 @@ h1 em,h2 em,h3 em{font-style:normal}
   }
 }
 .hero-buttons .btn{gap:15px}
+.section-next {
+  margin: clamp(22px, 4vw, 40px) auto 0;
+  padding-inline: 16px;
+  text-align: center;
+}
+.section-next .scroll {
+  align-items: center;
+  min-height: 44px;
+  margin: 0;
+  text-transform: uppercase;
+}
+.section-next .scroll:hover,
+.section-next .scroll:focus-visible {color: var(--text)}
 html{scroll-padding-top:94px}
 section[id]{scroll-margin-top:90px}
 main > :is(#acasa, #despre, #servicii, #evenimente, #galerie, #recenzii) {
@@ -512,14 +525,18 @@ a.review-platform:hover {color: var(--hover)}
 .review-star > svg {color: var(--muted)}
 .review-star-fill {position: absolute; inset: 0 auto 0 0; overflow: hidden; color: var(--accent)}
 .review-star-fill svg {fill: currentColor}
+.gallery-panel,
 .review-spotlight {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
   padding: clamp(16px, 2.8vw, 32px);
   border-radius: 22px;
   background: linear-gradient(128deg, color-mix(in srgb, var(--fire) 14%, var(--bg2)), var(--bg) 77%);
   box-shadow: 0 5px 16px color-mix(in srgb, var(--black) 24%, transparent);
+}
+.gallery-panel {min-width: 0}
+.review-spotlight {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   touch-action: pan-y pinch-zoom;
 }
 .review-wave {
@@ -691,7 +708,7 @@ a.review-source {min-width: 44px; min-height: 44px}
 }
 @media (max-width: 720px) {
   .reviews-fallback {grid-template-columns: minmax(0, 1fr)}
-  .review-spotlight {border-radius: 16px}
+  .gallery-panel, .review-spotlight {border-radius: 16px}
   .review-spotlight-stage {--review-columns: 1}
   .review-spotlight-controls {gap: 5px}
 }
@@ -711,7 +728,7 @@ a.review-source {min-width: 44px; min-height: 44px}
 /* V6 — secțiunea Despre Lee Events, cu portret */
 .about-grid-portrait{grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:clamp(32px,6vw,88px);align-items:center}
 .about-photo{position:relative;align-self:stretch;min-height:510px;overflow:hidden;background:var(--bg2);border:1px solid var(--border);border-radius:12px}
-.about-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;display:block}
+.about-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;display:block;-webkit-user-drag:none}
 .about-photo::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,color-mix(in srgb,var(--bg) 30%,transparent),transparent 35%)}
 
 .event-types{background:radial-gradient(ellipse at 90% 0%,var(--fire-surface),var(--bg2) 72%)}
