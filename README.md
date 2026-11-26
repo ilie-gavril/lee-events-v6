@@ -68,6 +68,10 @@ Am revenit la V4 (fără video în fundal). În secțiunea Despre este inclus po
 
 ## Verificări SEO după publicare
 
+### Mentenanță llms.txt
+
+Actualizează `llms.txt` când se schimbă serviciile, datele de contact, aria deservită sau când publici pagini dedicate. Verifică informațiile în pagina publică și în JSON-LD înainte de a le copia. Publică fișierul la rădăcină împreună cu `index.html` și `_headers`. După publicare, verifică răspunsul HTTP 200, antetul `Content-Type: text/plain; charset=utf-8` și conținutul Markdown la `https://lee-events.ro/llms.txt`.
+
 1. În [Google Search Console](https://search.google.com/search-console), selectează proprietatea verificată pentru `lee-events.ro`. Dacă încă nu există, urmează pașii de verificare afișați de Google.
 2. În raportul **Sitemapuri**, trimite `https://lee-events.ro/sitemap.xml`. Adresa din sitemap este aceeași cu adresa canonică a paginii.
 3. În **Inspectarea adresei URL**, introdu `https://lee-events.ro/` și folosește **Testează adresa URL publicată**. Verifică dacă pagina poate fi indexată și apoi solicită indexarea. Urmărește starea în Search Console.
