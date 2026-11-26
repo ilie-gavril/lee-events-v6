@@ -1,14 +1,16 @@
-# Lee Events — DJ & MC pentru evenimente.
+# Lee Events — DJ & MC pentru evenimente
 
 > Lee Events oferă servicii de DJ și MC pentru nunți, botezuri, evenimente corporate și petreceri private în municipiul și județul Iași.
 
-DJ LEE este artistul din spatele Lee Events. Serviciile includ DJ Open-Format, MC, sonorizare profesională și lumini dinamice. În funcție de pachet și de condițiile locației, se pot discuta efecte speciale precum fum greu, jeturi de CO₂, confetti și artificii de interior.
+DJ LEE este artistul din spatele Lee Events și activează din 2016 la evenimente private, ca DJ Open-Format și MC. Serviciile includ sonorizare profesională și lumini dinamice. În funcție de pachet și de condițiile locației, se pot discuta efecte speciale precum fum greu, jeturi de CO₂, confetti și artificii de interior.
 
 Programul poate include momente live cu soliști vocali, saxofoniști și alți instrumentiști, în funcție de concept și disponibilitate. DJ LEE poate coordona momentele muzicale și cu formațiile sau artiștii deja rezervați de client.
 
 Lee Events lucrează în Iași, Târgu Frumos, Pașcani și în localitățile din împrejurimi. Deplasările în alte județe se stabilesc în funcție de data și locația evenimentului.
 
-Pentru o ofertă și verificarea disponibilității, transmite data, localitatea și tipul evenimentului prin formularul de contact. Telefon: +40 747 752 366. E-mail: contact@lee-events.ro.
+Prețurile și pachetele se stabilesc prin ofertă personalizată, în funcție de dată, locație, durată și serviciile incluse. Se pot rezerva doar serviciile de DJ, fără sonorizare și lumini, dacă locația sau formația are echipamentele necesare și compatibilitatea se stabilește din timp.
+
+Pentru o ofertă și verificarea disponibilității, completează data, localitatea și tipul evenimentului în formularul de contact. Formularul deschide WhatsApp cu un mesaj precompletat, pe care îl poți trimite. Telefon: +40 747 752 366. E-mail: contact@lee-events.ro.
 
 ## Website oficial
 
@@ -17,7 +19,8 @@ Pentru o ofertă și verificarea disponibilității, transmite data, localitatea
 - [Servicii](https://lee-events.ro/#servicii): DJ, MC, muzică live, sonorizare, lumini și efecte speciale.
 - [Tipuri de evenimente](https://lee-events.ro/#evenimente): Oferte pentru nunți, botezuri și evenimente corporate.
 - [Întrebări frecvente](https://lee-events.ro/#intrebari-frecvente): Răspunsuri despre servicii, momente live, prețuri și rezervări.
-- [Contact](https://lee-events.ro/#contact): Formular pentru oferte și verificarea disponibilității.
+- [Contact](https://lee-events.ro/#contact): Formular pentru oferte și disponibilitate, cu mesaj pregătit în WhatsApp.
+- [Recenzii](https://lee-events.ro/#recenzii): Testimoniale publicate pe site.
 
 ## Profiluri externe oficiale
 
@@ -28,4 +31,3 @@ Pentru o ofertă și verificarea disponibilității, transmite data, localitatea
 ## Optional
 
 - [Galerie](https://lee-events.ro/#galerie): Fotografii și Reel-uri din portofoliu.
-- [Recenzii](https://lee-events.ro/#recenzii): Testimoniale publicate pe site.
