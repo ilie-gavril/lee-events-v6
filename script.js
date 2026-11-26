@@ -551,7 +551,7 @@ sectionLinks.forEach(link => link.addEventListener('click', event => {
   if (!section) return;
 
   event.preventDefault();
-  if (link.dataset.eventType) $('#offer-form select[name="tip"]').value = link.dataset.eventType;
+  if (link.dataset.eventType) $('#offer-form').elements.namedItem('tip').value = link.dataset.eventType;
   const bounds = section.getBoundingClientRect();
   const sectionTop = window.scrollY + bounds.top - header.offsetHeight;
   const centerOffset = hash === '#contact'

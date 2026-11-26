@@ -604,15 +604,16 @@
                     </ul>
                 </div>
                 <form class="contact-form" id="offer-form"><label>Numele tău<input name="nume" autocomplete="name"
-                            required placeholder="Cum te numești?"></label><label>Tipul evenimentului<select name="tip"
-                            required>
-                            <option value="">Alege evenimentul</option>
-                            <option>Nuntă</option>
-                            <option>Botez</option>
-                            <option>Aniversare</option>
-                            <option>Corporate</option>
-                            <option>Alt eveniment</option>
-                        </select></label>
+                            required placeholder="Cum te numești?"></label>
+                    <fieldset class="event-options">
+                        <legend>Tipul evenimentului</legend>
+                        <div class="event-option-list">
+                            <label class="event-option"><input type="radio" name="tip" value="Nuntă" required><span>Nuntă</span></label>
+                            <label class="event-option"><input type="radio" name="tip" value="Botez"><span>Botez</span></label>
+                            <label class="event-option"><input type="radio" name="tip" value="Corporate"><span>Corporate</span></label>
+                            <label class="event-option"><input type="radio" name="tip" value="Alt eveniment"><span>Alt eveniment</span></label>
+                        </div>
+                    </fieldset>
                     <div class="form-row"><label>Data evenimentului<input type="date" name="data"
                                 required></label><label>Localitatea<input name="localitate" required
                                 placeholder="Ex. Iași"></label></div><label>Detalii suplimentare<textarea name="detalii"
