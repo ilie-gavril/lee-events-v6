@@ -52,83 +52,56 @@
               "url": "https://lee-events.ro/",
               "telephone": "+40747752366",
               "logo": {
-                "@type": "ImageObject",
-                "url": "https://lee-events.ro/assets/lee-events-wordmark.png",
-                "width": 1774,
-                "height": 887
+                "@id": "https://lee-events.ro/#logo"
               },
               "areaServed": [
                 {
-                  "@type": "City",
-                  "name": "Iași"
+                  "@id": "https://lee-events.ro/#municipiul-iasi"
                 },
                 {
-                  "@type": "AdministrativeArea",
-                  "name": "Județul Iași"
+                  "@id": "https://lee-events.ro/#judetul-iasi"
                 }
               ],
               "hasOfferCatalog": {
-                "@type": "OfferCatalog",
-                "name": "Servicii Lee Events",
-                "itemListElement": [
-                  {
-                    "@type": "Offer",
-                    "itemOffered": {
-                      "@type": "Service",
-                      "name": "DJ pentru nunți, botezuri și evenimente private",
-                      "provider": {
-                        "@id": "https://lee-events.ro/#lee-events"
-                      }
-                    }
-                  },
-                  {
-                    "@type": "Offer",
-                    "itemOffered": {
-                      "@type": "Service",
-                      "name": "MC pentru evenimente",
-                      "provider": {
-                        "@id": "https://lee-events.ro/#lee-events"
-                      }
-                    }
-                  },
-                  {
-                    "@type": "Offer",
-                    "itemOffered": {
-                      "@type": "Service",
-                      "name": "Momente muzicale live",
-                      "provider": {
-                        "@id": "https://lee-events.ro/#lee-events"
-                      }
-                    }
-                  },
-                  {
-                    "@type": "Offer",
-                    "itemOffered": {
-                      "@type": "Service",
-                      "name": "Sonorizare profesională",
-                      "provider": {
-                        "@id": "https://lee-events.ro/#lee-events"
-                      }
-                    }
-                  },
-                  {
-                    "@type": "Offer",
-                    "itemOffered": {
-                      "@type": "Service",
-                      "name": "Lumini și efecte speciale",
-                      "provider": {
-                        "@id": "https://lee-events.ro/#lee-events"
-                      }
-                    }
-                  }
-                ]
+                "@id": "https://lee-events.ro/#catalog-servicii"
               },
               "email": "contact@lee-events.ro",
               "sameAs": [
                 "https://www.facebook.com/lee.events.ro",
-                "https://www.instagram.com/lee.events.ro/"
+                "https://www.instagram.com/lee.events.ro/",
+                "https://www.google.com/maps/place/DJ+Lee+Events/data=!4m2!3m1!1s0x40cafbec9ded26bf:0x885d1e485537bd5f"
               ],
-              "description": "DJ și MC pentru nunți, botezuri, petreceri private și corporate în Iași. Sonorizare și lumini adaptate evenimentului, cu deplasare în funcție de locație."
+              "description": "DJ și MC pentru nunți, botezuri, petreceri private și corporate în Iași. Sonorizare și lumini adaptate evenimentului, cu deplasare în funcție de locație.",
+              "image": [
+                {
+                  "@id": "https://lee-events.ro/#portret-dj-lee"
+                },
+                {
+                  "@id": "https://lee-events.ro/#dj-lee-la-pupitru"
+                }
+              ],
+              "contactPoint": {
+                "@id": "https://lee-events.ro/#contact-oferte"
+              }
+            },
+            {
+              "@type": "Person",
+              "@id": "https://lee-events.ro/#dj-lee",
+              "name": "DJ LEE",
+              "jobTitle": "DJ și MC pentru evenimente",
+              "worksFor": {
+                "@id": "https://lee-events.ro/#lee-events"
+              },
+              "image": {
+                "@id": "https://lee-events.ro/#portret-dj-lee"
+              },
+              "knowsAbout": [
+                "DJ Open Format",
+                "MC",
+                "Entertainment pentru evenimente",
+                "Sonorizare profesională",
+                "Iluminat pentru evenimente"
+              ]
             },
             {
               "@type": "WebSite",
@@ -141,7 +114,10 @@
               }
             },
             {
-              "@type": "WebPage",
+              "@type": [
+                "WebPage",
+                "FAQPage"
+              ],
               "@id": "https://lee-events.ro/#webpage",
               "url": "https://lee-events.ro/",
               "name": "DJ Nuntă, Botez și MC în Iași | Lee Events",
@@ -150,9 +126,432 @@
               "isPartOf": {
                 "@id": "https://lee-events.ro/#website"
               },
-              "about": {
+              "about": [
+                {
+                  "@id": "https://lee-events.ro/#lee-events"
+                },
+                {
+                  "@id": "https://lee-events.ro/#dj-lee"
+                }
+              ],
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "În ce localități sunt disponibile serviciile Lee Events?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Lee Events are activitatea principală în județul Iași, oferind servicii de DJ pentru evenimente în Iași, Târgu Frumos, Pașcani și în localitățile din împrejurimi. Suntem disponibili și pentru deplasări în alte județe, în funcție de data și locația evenimentului."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Oferi servicii de DJ pentru botezuri și cumătrii în Iași?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Da. Lee Events oferă servicii de DJ pentru botezuri și cumătrii în Iași și în alte localități. Selecția muzicală este adaptată invitaților de toate vârstele, îmbinând momentele de socializare cu cele de dans, pentru o petrecere echilibrată și plină de energie."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Oferi servicii de DJ pentru petreceri corporate?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Da. Asigurăm servicii de DJ, sonorizare și lumini pentru petreceri de companie, evenimente corporate, gale, aniversări de firmă și evenimente de networking. Muzica este adaptată conceptului evenimentului, de la un ambient elegant și discret până la o petrecere dinamică."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Ce înseamnă un DJ Open-Format?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Un DJ Open-Format nu se limitează la un singur stil muzical, ci combină și mixează diferite genuri, adaptându-se publicului și atmosferei evenimentului. Această abordare este ideală pentru nunți, botezuri și petreceri private, unde invitații au vârste și preferințe muzicale diferite."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Ce servicii sunt incluse într-un pachet DJ pentru nuntă?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "În funcție de pachetul ales, serviciile pot include DJ Open-Format, MC, sonorizare profesională, lumini dinamice, efecte speciale și coordonarea momentelor muzicale importante. Fiecare pachet este adaptat locației, numărului de invitați și conceptului evenimentului."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Oferi servicii de DJ și MC pentru nunți și botezuri?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Da. Serviciile de DJ și MC se completează pentru a asigura desfășurarea naturală a evenimentului. Pe lângă selecția și mixarea muzicii, mă ocup de prezentarea momentelor importante, anunțurile pentru invitați și coordonarea programului artistic."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Asiguri sonorizare profesională și lumini pentru evenimente?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Da. Lee Events pune la dispoziție sisteme profesionale de sonorizare și lumini dinamice, adaptate dimensiunii locației și numărului de invitați. Configurația tehnică este aleasă astfel încât să ofere claritate sonoră, confort auditiv și o atmosferă vizuală spectaculoasă pe ringul de dans."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Putem alege muzica și playlistul pentru eveniment?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Absolut. Stabilim împreună direcția muzicală, piesele preferate, melodiile pentru momentele speciale și eventualele melodii pe care dorești să le eviți. Ca DJ Open-Format, adaptez selecția muzicală în timp real, în funcție de energia și preferințele invitaților."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Oferi efect de fum greu pentru dansul mirilor?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Da. Efectul de fum greu poate fi inclus în pachetul pentru nuntă, transformând primul dans al mirilor într-un moment spectaculos. Efectul creează impresia unui dans pe nori și completează atmosfera vizuală a acestui moment special."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Pot rezerva doar serviciile de DJ, fără sonorizare și lumini?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Da. Dacă locația evenimentului sau formația cu care colaborezi dispune deja de echipamentele tehnice necesare, putem discuta o variantă de pachet care include exclusiv serviciile de DJ. Compatibilitatea echipamentelor se stabilește înaintea evenimentului."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Colaborați cu soliști vocali și instrumentiști pentru evenimente?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Da. Lee Events colaborează cu soliști, soliste și instrumentiști pentru a integra momente muzicale live în programul artistic al nunților, botezurilor și evenimentelor corporate. Colaborările sunt stabilite în funcție de preferințele tale, conceptul petrecerii și disponibilitatea artiștilor."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Pot combina serviciile de DJ cu momente de muzică live la nuntă?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Absolut. Combinația dintre DJ și muzică live oferă varietate și personalitate programului artistic. Momentele interpretate live sunt integrate natural în desfășurarea petrecerii, completând seturile DJ-ului și menținând energia evenimentului."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Pot avea un saxofonist sau alți instrumentiști la eveniment?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Da. În funcție de conceptul evenimentului, putem discuta colaborări cu saxofoniști și alți instrumentiști pentru momente muzicale live. Acestea pot completa primirea invitaților, momentele speciale sau chiar seturile DJ-ului de pe ringul de dans, în funcție de disponibilitatea artiștilor."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Poți colabora cu o formație sau cu artiștii pe care i-am rezervat deja?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Da. Serviciile Lee Events pot fi integrate într-un program artistic care include formații, soliști vocali sau instrumentiști aleși de tine. Stabilim din timp desfășurarea programului și aspectele tehnice, astfel încât tranzițiile dintre muzica mixată și interpretările live să fie cât mai naturale."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Momentele muzicale live sunt incluse în pachetele DJ?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Momentele muzicale live se stabilesc individual, în funcție de artiștii doriți, durata prestației și disponibilitatea acestora. Dacă îți dorești o combinație între DJ și muzică live, menționează acest lucru atunci când soliciți o ofertă personalizată."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Cât costă un DJ pentru nuntă în Iași?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Prețul serviciilor de DJ pentru nuntă variază în funcție de data evenimentului, locație, durata petrecerii și serviciile incluse. Lee Events oferă pachete personalizate care pot include DJ, MC, sonorizare profesională, lumini dinamice și efecte speciale. Solicită o ofertă pentru a descoperi varianta potrivită evenimentului tău."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Cu cât timp înainte trebuie să rezerv un DJ pentru nuntă?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Este recomandat să rezervi serviciile de DJ cât mai devreme, în special pentru evenimentele organizate în weekendurile din sezonul nunților. Disponibilitatea diferă în funcție de perioadă, motiv pentru care este indicat să verifici data imediat ce ai stabilit locația evenimentului."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Cum verific disponibilitatea și rezerv un DJ pentru evenimentul meu?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Poți verifica disponibilitatea completând formularul de contact de pe site-ul Lee Events sau apelând numărul 0747 752 366. Transmite-ne data, locația și tipul evenimentului, iar împreună vom stabili serviciile potrivite și detaliile rezervării."
+                  }
+                }
+              ]
+            },
+            {
+              "@type": "ContactPoint",
+              "@id": "https://lee-events.ro/#contact-oferte",
+              "contactType": "Solicitări de ofertă",
+              "telephone": "+40747752366",
+              "email": "contact@lee-events.ro"
+            },
+            {
+              "@type": "ImageObject",
+              "@id": "https://lee-events.ro/#logo",
+              "url": "https://lee-events.ro/assets/lee-events-wordmark.png",
+              "width": 1774,
+              "height": 887
+            },
+            {
+              "@type": "ImageObject",
+              "@id": "https://lee-events.ro/#portret-dj-lee",
+              "contentUrl": "https://lee-events.ro/assets/dj-lee-portret.webp",
+              "caption": "DJ Lee, portret cu controller DJ",
+              "width": 900,
+              "height": 1348
+            },
+            {
+              "@type": "ImageObject",
+              "@id": "https://lee-events.ro/#dj-lee-la-pupitru",
+              "contentUrl": "https://lee-events.ro/assets/gallery/webp/foto-8-large.webp",
+              "caption": "DJ Lee mixează la pupitru, încadrat de dâre de lumină roșie",
+              "width": 1920,
+              "height": 1280
+            },
+            {
+              "@type": "City",
+              "@id": "https://lee-events.ro/#municipiul-iasi",
+              "name": "Iași"
+            },
+            {
+              "@type": "AdministrativeArea",
+              "@id": "https://lee-events.ro/#judetul-iasi",
+              "name": "Județul Iași"
+            },
+            {
+              "@type": "OfferCatalog",
+              "@id": "https://lee-events.ro/#catalog-servicii",
+              "name": "Servicii Lee Events",
+              "itemListElement": [
+                {
+                  "@type": "Offer",
+                  "@id": "https://lee-events.ro/#oferta-dj-nunti",
+                  "itemOffered": {
+                    "@id": "https://lee-events.ro/#serviciu-dj-nunti"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "@id": "https://lee-events.ro/#oferta-dj-botezuri",
+                  "itemOffered": {
+                    "@id": "https://lee-events.ro/#serviciu-dj-botezuri"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "@id": "https://lee-events.ro/#oferta-dj-corporate",
+                  "itemOffered": {
+                    "@id": "https://lee-events.ro/#serviciu-dj-corporate"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "@id": "https://lee-events.ro/#oferta-dj-petreceri-private",
+                  "itemOffered": {
+                    "@id": "https://lee-events.ro/#serviciu-dj-petreceri-private"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "@id": "https://lee-events.ro/#oferta-mc-evenimente",
+                  "itemOffered": {
+                    "@id": "https://lee-events.ro/#serviciu-mc-evenimente"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "@id": "https://lee-events.ro/#oferta-muzica-live",
+                  "itemOffered": {
+                    "@id": "https://lee-events.ro/#serviciu-muzica-live"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "@id": "https://lee-events.ro/#oferta-sonorizare",
+                  "itemOffered": {
+                    "@id": "https://lee-events.ro/#serviciu-sonorizare"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "@id": "https://lee-events.ro/#oferta-lumini-dinamice",
+                  "itemOffered": {
+                    "@id": "https://lee-events.ro/#serviciu-lumini-dinamice"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "@id": "https://lee-events.ro/#oferta-efecte-speciale",
+                  "itemOffered": {
+                    "@id": "https://lee-events.ro/#serviciu-efecte-speciale"
+                  }
+                }
+              ]
+            },
+            {
+              "@type": "Service",
+              "@id": "https://lee-events.ro/#serviciu-dj-nunti",
+              "name": "DJ pentru nunți",
+              "serviceType": "Servicii DJ open-format pentru nunți",
+              "description": "Selecție și mixaj adaptate invitaților, programului și pieselor alese pentru momentele importante ale nunții.",
+              "provider": {
                 "@id": "https://lee-events.ro/#lee-events"
-              }
+              },
+              "areaServed": [
+                {
+                  "@id": "https://lee-events.ro/#municipiul-iasi"
+                },
+                {
+                  "@id": "https://lee-events.ro/#judetul-iasi"
+                }
+              ]
+            },
+            {
+              "@type": "Service",
+              "@id": "https://lee-events.ro/#serviciu-dj-botezuri",
+              "name": "DJ pentru botezuri",
+              "serviceType": "Servicii DJ pentru botezuri și cumătrii",
+              "description": "Selecție muzicală pentru invitați de toate vârstele, adaptată momentelor de socializare și dans.",
+              "provider": {
+                "@id": "https://lee-events.ro/#lee-events"
+              },
+              "areaServed": [
+                {
+                  "@id": "https://lee-events.ro/#municipiul-iasi"
+                },
+                {
+                  "@id": "https://lee-events.ro/#judetul-iasi"
+                }
+              ]
+            },
+            {
+              "@type": "Service",
+              "@id": "https://lee-events.ro/#serviciu-dj-corporate",
+              "name": "DJ pentru evenimente corporate",
+              "serviceType": "Servicii DJ pentru evenimente corporate",
+              "description": "Selecție muzicală adaptată conceptului petrecerilor de companie, galelor și evenimentelor de networking.",
+              "provider": {
+                "@id": "https://lee-events.ro/#lee-events"
+              },
+              "areaServed": [
+                {
+                  "@id": "https://lee-events.ro/#municipiul-iasi"
+                },
+                {
+                  "@id": "https://lee-events.ro/#judetul-iasi"
+                }
+              ]
+            },
+            {
+              "@type": "Service",
+              "@id": "https://lee-events.ro/#serviciu-dj-petreceri-private",
+              "name": "DJ pentru petreceri private și aniversări",
+              "serviceType": "Servicii DJ pentru petreceri private și aniversări",
+              "description": "Mixaj open-format adaptat preferințelor invitaților, de la muzică ambientală la piesele pentru ringul de dans.",
+              "provider": {
+                "@id": "https://lee-events.ro/#lee-events"
+              },
+              "areaServed": [
+                {
+                  "@id": "https://lee-events.ro/#municipiul-iasi"
+                },
+                {
+                  "@id": "https://lee-events.ro/#judetul-iasi"
+                }
+              ]
+            },
+            {
+              "@type": "Service",
+              "@id": "https://lee-events.ro/#serviciu-mc-evenimente",
+              "name": "MC pentru evenimente",
+              "serviceType": "Prezentare și coordonare de momente",
+              "description": "Prezentarea momentelor importante, anunțuri pentru invitați și coordonarea programului artistic.",
+              "provider": {
+                "@id": "https://lee-events.ro/#lee-events"
+              },
+              "areaServed": [
+                {
+                  "@id": "https://lee-events.ro/#municipiul-iasi"
+                },
+                {
+                  "@id": "https://lee-events.ro/#judetul-iasi"
+                }
+              ]
+            },
+            {
+              "@type": "Service",
+              "@id": "https://lee-events.ro/#serviciu-muzica-live",
+              "name": "Momente muzicale live",
+              "serviceType": "Momente live cu soliști și instrumentiști",
+              "description": "Integrarea unor momente live în program, prin colaborări alese în funcție de preferințe și de disponibilitatea artiștilor.",
+              "provider": {
+                "@id": "https://lee-events.ro/#lee-events"
+              },
+              "areaServed": [
+                {
+                  "@id": "https://lee-events.ro/#municipiul-iasi"
+                },
+                {
+                  "@id": "https://lee-events.ro/#judetul-iasi"
+                }
+              ]
+            },
+            {
+              "@type": "Service",
+              "@id": "https://lee-events.ro/#serviciu-sonorizare",
+              "name": "Sonorizare profesională",
+              "serviceType": "Sonorizare pentru evenimente",
+              "description": "Sisteme audio configurate în funcție de dimensiunea locației și numărul de invitați.",
+              "provider": {
+                "@id": "https://lee-events.ro/#lee-events"
+              },
+              "areaServed": [
+                {
+                  "@id": "https://lee-events.ro/#municipiul-iasi"
+                },
+                {
+                  "@id": "https://lee-events.ro/#judetul-iasi"
+                }
+              ]
+            },
+            {
+              "@type": "Service",
+              "@id": "https://lee-events.ro/#serviciu-lumini-dinamice",
+              "name": "Lumini dinamice",
+              "serviceType": "Iluminat pentru evenimente",
+              "description": "Lumini dinamice adaptate spațiului și ritmului muzicii, pentru ringul de dans și momentele din program.",
+              "provider": {
+                "@id": "https://lee-events.ro/#lee-events"
+              },
+              "areaServed": [
+                {
+                  "@id": "https://lee-events.ro/#municipiul-iasi"
+                },
+                {
+                  "@id": "https://lee-events.ro/#judetul-iasi"
+                }
+              ]
+            },
+            {
+              "@type": "Service",
+              "@id": "https://lee-events.ro/#serviciu-efecte-speciale",
+              "name": "Efecte speciale pentru evenimente",
+              "serviceType": "Efecte speciale pentru petreceri",
+              "description": "Efecte vizuale adaptate pachetului și locației, inclusiv fum greu pentru dansul mirilor, atunci când este solicitat.",
+              "provider": {
+                "@id": "https://lee-events.ro/#lee-events"
+              },
+              "areaServed": [
+                {
+                  "@id": "https://lee-events.ro/#municipiul-iasi"
+                },
+                {
+                  "@id": "https://lee-events.ro/#judetul-iasi"
+                }
+              ]
             }
           ]
         }
