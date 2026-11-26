@@ -247,6 +247,7 @@ function setupGallery(config) {
   const embed = $('.gallery-video-embed', video);
   const videoStatus = $('.gallery-video-status', video);
   const videoLink = $('.gallery-video-link', video);
+  const videoLinkFallback = videoLink.href;
   const items = config.flatMap(item => {
     if (item.type === 'image' && item.src) return [item];
     const instagramUrl = item.type === 'video' && galleryInstagramUrl(item.instagramUrl);
@@ -415,7 +416,7 @@ function setupGallery(config) {
     embedObserver?.disconnect();
     clearTimeout(embedTimeout);
     embed.replaceChildren();
-    videoLink.removeAttribute('href');
+    videoLink.href = videoLinkFallback;
     videoStatus.textContent = '';
   }
 
@@ -537,7 +538,28 @@ function setupFaq() {
 }
 
 setupFaq();
-$('#offer-form').addEventListener('submit', event => { event.preventDefault(); const f = new FormData(event.currentTarget); const msg = `Bună! Aș dori o ofertă, Lee Events. \nNume: ${f.get('nume')}\nEveniment: ${f.get('tip')}\nData: ${f.get('data')}\nLocalitatea: ${f.get('localitate')}\nDetalii: ${f.get('detalii') || '-'}`; window.open('https://wa.me/40747752366?text=' + encodeURIComponent(msg), '_blank', 'noopener,noreferrer'); });
+const offerForm = $('#offer-form');
+const eventDate = offerForm.elements.namedItem('data');
+
+function setMinimumEventDate() {
+  const today = new Date();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  eventDate.min = `${today.getFullYear()}-${month}-${day}`;
+}
+
+setMinimumEventDate();
+eventDate.addEventListener('focus', setMinimumEventDate);
+window.addEventListener('focus', setMinimumEventDate);
+offerForm.addEventListener('submit', event => {
+  event.preventDefault();
+  setMinimumEventDate();
+  if (!eventDate.reportValidity()) return;
+
+  const f = new FormData(offerForm);
+  const msg = `Bună! Aș dori o ofertă, Lee Events. \nNume: ${f.get('nume')}\nEveniment: ${f.get('tip')}\nData: ${f.get('data')}\nLocalitatea: ${f.get('localitate')}\nDetalii: ${f.get('detalii') || '-'}`;
+  window.open('https://wa.me/40747752366?text=' + encodeURIComponent(msg), '_blank', 'noopener,noreferrer');
+});
 
 // Meniu fix și indicator activ sincronizat cu secțiunea vizibilă.
 const header = $('.header');
@@ -637,9 +659,8 @@ sectionLinks.forEach(link => link.addEventListener('click', event => {
   if (link.dataset.eventType) $('#offer-form').elements.namedItem('tip').value = link.dataset.eventType;
   const bounds = section.getBoundingClientRect();
   const sectionTop = window.scrollY + bounds.top - header.offsetHeight;
-  const centerOffset = hash === '#contact'
-    ? (bounds.height - (window.innerHeight - header.offsetHeight)) / 2
-    : 0;
+  const availableHeight = window.innerHeight - header.offsetHeight;
+  const centerOffset = hash === '#contact' ? (bounds.height - availableHeight) / 2 : 0;
 
   if (location.hash !== hash) history.pushState(null, '', hash);
   if (!section.hasAttribute('tabindex')) section.setAttribute('tabindex', '-1');
