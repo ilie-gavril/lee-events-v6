@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://lee-events.ro/</loc>
+    <image:image><image:loc>https://lee-events.ro/assets/gallery/webp/foto-9-large.webp</image:loc></image:image>
+    <image:image><image:loc>https://lee-events.ro/assets/gallery/webp/foto-6-large.webp</image:loc></image:image>
+    <image:image><image:loc>https://lee-events.ro/assets/gallery/webp/foto-3-large.webp</image:loc></image:image>
+    <image:image><image:loc>https://lee-events.ro/assets/gallery/webp/foto-2-large.webp</image:loc></image:image>
+    <image:image><image:loc>https://lee-events.ro/assets/gallery/webp/foto-1-large.webp</image:loc></image:image>
+    <image:image><image:loc>https://lee-events.ro/assets/gallery/webp/foto-5-large.webp</image:loc></image:image>
+    <image:image><image:loc>https://lee-events.ro/assets/gallery/webp/foto-4-large.webp</image:loc></image:image>
+    <image:image><image:loc>https://lee-events.ro/assets/gallery/webp/foto-7-large.webp</image:loc></image:image>
+    <image:image><image:loc>https://lee-events.ro/assets/gallery/webp/foto-8-large.webp</image:loc></image:image>
   </url>
 </urlset>
