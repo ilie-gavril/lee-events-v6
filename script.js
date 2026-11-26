@@ -68,6 +68,16 @@ function reviewExternalLink(url, className) {
   return link;
 }
 
+function httpsLink(value) {
+  if (!value) return null;
+  try {
+    const url = new URL(value);
+    return url.protocol === 'https:' && !url.username && !url.password ? url.href : null;
+  } catch {
+    return null;
+  }
+}
+
 function setupReviews(items, platforms) {
   const root = $('#recenzii');
   if (!items.length) return;
@@ -104,7 +114,8 @@ function setupReviews(items, platforms) {
 
   function renderPlatforms() {
     for (const [key, name] of Object.entries(platformNames)) {
-      const { url, rating, recommendation, count: reviewCount } = platforms[key] || {};
+      const { url: configuredUrl, rating, recommendation, count: reviewCount } = platforms[key] || {};
+      const url = httpsLink(configuredUrl);
       const hasRating = validRating(rating);
       const hasRecommendation = Number.isFinite(recommendation) && recommendation >= 0 && recommendation <= 100;
       const hasCount = Number.isInteger(reviewCount) && reviewCount >= 0;
@@ -152,9 +163,10 @@ function setupReviews(items, platforms) {
 
     const sourceName = item.source?.toLowerCase();
     if (Object.hasOwn(platformNames, sourceName)) {
-      const source = item.sourceUrl ? reviewExternalLink(item.sourceUrl, 'review-source') : el('span', 'review-source');
+      const sourceUrl = httpsLink(item.sourceUrl);
+      const source = sourceUrl ? reviewExternalLink(sourceUrl, 'review-source') : el('span', 'review-source');
       source.setAttribute('aria-label', `Sursa: ${platformNames[sourceName]}`);
-      if (!item.sourceUrl) source.setAttribute('role', 'img');
+      if (!sourceUrl) source.setAttribute('role', 'img');
       source.append(reviewPlatformLogo(sourceName));
       attribution.append(source);
     }
@@ -165,9 +177,13 @@ function setupReviews(items, platforms) {
 
   function updateControls() {
     const maxScroll = stage.scrollWidth - stage.clientWidth;
-    controls.hidden = maxScroll <= 1;
-    prev.disabled = stage.scrollLeft <= 1;
-    next.disabled = stage.scrollLeft >= maxScroll - 1;
+    const left = stage.scrollLeft;
+    const hidden = maxScroll <= 1;
+    const atStart = left <= 1;
+    const atEnd = left >= maxScroll - 1;
+    if (controls.hidden !== hidden) controls.hidden = hidden;
+    if (prev.disabled !== atStart) prev.disabled = atStart;
+    if (next.disabled !== atEnd) next.disabled = atEnd;
   }
 
   function move(direction) {
@@ -189,10 +205,9 @@ function setupReviews(items, platforms) {
 
   renderPlatforms();
   interactive.hidden = false;
-  const ordered = [...items].sort((first, second) =>
-    [...second.review].length - [...first.review].length
-  );
-  stage.replaceChildren(...ordered.map(buildReview));
+  const ordered = items.map(item => ({ item, length: [...(item.review || '')].length }));
+  ordered.sort((first, second) => second.length - first.length);
+  stage.replaceChildren(...ordered.map(({ item }) => buildReview(item)));
   updateControls();
   $('.reviews-fallback', root).hidden = true;
   new ResizeObserver(updateControls).observe(stage);
@@ -301,6 +316,7 @@ function setupGallery(config) {
 
     function unavailable() {
       if (activePost !== quote || !video.open) return;
+      clearTimeout(embedTimeout);
       videoStatus.textContent = 'Postarea poate fi deschisă direct pe Instagram.';
     }
 
@@ -457,6 +473,70 @@ function setupGallery(config) {
 
 setupGallery(content.galleryItems || []);
 setupReviews(content.reviews || [], content.reviewPlatforms || {});
+
+function setupFaq() {
+  const faq = $('#intrebari-frecvente');
+  const tablist = $('.faq-tabs', faq);
+  const tabs = [...tablist.querySelectorAll('[role="tab"]')];
+  const groups = tabs.map(tab => document.getElementById(tab.getAttribute('aria-controls')));
+  if (!tabs.length || groups.some(group => !group)) return;
+  const questions = groups.map(group => [...group.querySelectorAll('details')]);
+  const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  let active = -1;
+
+  tabs.forEach((tab, index) => {
+    $('.faq-count', tab).textContent = questions[index].length;
+    tab.style.setProperty('--faq-delay', `${index * 60}ms`);
+    const group = groups[index];
+    group.setAttribute('role', 'tabpanel');
+    group.setAttribute('aria-labelledby', tab.id);
+    $('.faq-group-title', group).hidden = true;
+    questions[index].forEach((question, position) => {
+      question.style.setProperty('--faq-delay', `${position * 60}ms`);
+    });
+    tab.addEventListener('click', () => selectCategory(index));
+    tab.addEventListener('keydown', event => {
+      let target;
+      if (event.key === 'Home') target = 0;
+      else if (event.key === 'End') target = tabs.length - 1;
+      else if (event.key === 'ArrowLeft') target = (index + tabs.length - 1) % tabs.length;
+      else if (event.key === 'ArrowRight') target = (index + 1) % tabs.length;
+      else return;
+      event.preventDefault();
+      selectCategory(target);
+      tabs[target].focus({ preventScroll: true });
+    });
+  });
+
+  function selectCategory(index) {
+    if (index === active) return;
+    if (active !== -1) faq.classList.remove('faq-entered');
+    tabs.forEach((tab, position) => {
+      const selected = position === index;
+      tab.setAttribute('aria-selected', String(selected));
+      tab.tabIndex = selected ? 0 : -1;
+      groups[position].hidden = !selected;
+      groups[position].classList.toggle('faq-changing', selected && active !== -1 && !motion.matches);
+    });
+    questions[index].forEach((question, position) => { question.open = position === 0; });
+    active = index;
+  }
+
+  selectCategory(0);
+  faq.classList.add('faq-enhanced');
+  tablist.hidden = false;
+  if (!motion.matches && 'IntersectionObserver' in window) {
+    const entry = new IntersectionObserver(entries => {
+      if (!entries.some(item => item.isIntersecting)) return;
+      entry.disconnect();
+      faq.classList.add('faq-entered');
+      setTimeout(() => faq.classList.remove('faq-entered'), 240 + questions[active].length * 60);
+    });
+    entry.observe($('.faq-intro', faq));
+  }
+}
+
+setupFaq();
 $('#offer-form').addEventListener('submit', event => { event.preventDefault(); const f = new FormData(event.currentTarget); const msg = `Bună! Aș dori o ofertă, Lee Events. \nNume: ${f.get('nume')}\nEveniment: ${f.get('tip')}\nData: ${f.get('data')}\nLocalitatea: ${f.get('localitate')}\nDetalii: ${f.get('detalii') || '-'}`; window.open('https://wa.me/40747752366?text=' + encodeURIComponent(msg), '_blank', 'noopener,noreferrer'); });
 
 // Meniu fix și indicator activ sincronizat cu secțiunea vizibilă.
@@ -465,6 +545,7 @@ const sections = navLinks.map(link => document.querySelector(link.getAttribute('
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const headerControls = [menu, toggle, $('.header-offer', header)];
 const headerAnimations = new WeakMap();
+let activeSection;
 
 function updateHeader() {
   const scrolled = window.scrollY > 24;
@@ -492,6 +573,8 @@ function updateNavigation() {
   for (const section of sections) {
     if (section.getBoundingClientRect().top <= probe) current = section.id;
   }
+  if (current === activeSection) return;
+  activeSection = current;
   navLinks.forEach(link => {
     const active = link.getAttribute('href') === '#' + current;
     link.classList.toggle('active', active);
@@ -542,7 +625,7 @@ window.addEventListener('keydown', event => {
 
 const sectionLinks = [
   ...navLinks,
-  ...document.querySelectorAll('.hero .scroll, .hero-buttons a[href^="#"], .event-type-card a[data-event-type]')
+  ...document.querySelectorAll('.hero .scroll, .hero-buttons a[href^="#"], .event-type-card a[data-event-type], .faq-actions a[href="#contact"]')
 ];
 sectionLinks.forEach(link => link.addEventListener('click', event => {
   if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
