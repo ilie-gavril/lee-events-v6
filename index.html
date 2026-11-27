@@ -606,6 +606,8 @@
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
     <link rel="preload" as="image" href="assets/ambient-bg.webp" fetchpriority="high">
     <link rel="stylesheet" href="styles.css">
+    <link rel="preload" href="assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin fetchpriority="low">
+    <link rel="preload" href="assets/fonts/space-grotesk-latin-ext.woff2" as="font" type="font/woff2" crossorigin fetchpriority="low">
     <script defer src="content.js"></script>
     <script defer src="script.js"></script>
 </head>
@@ -615,7 +617,11 @@
     <header class="header" id="top">
         <div class="shell nav"><a class="brand" href="#acasa" aria-label="Lee Events - Acasă">
                 <picture class="wordmark-picture">
-                    <source type="image/webp" srcset="assets/lee-events-wordmark.webp"><img
+                    <source type="image/webp" sizes="(max-width: 720px) 112px, 132px"
+                        srcset="assets/responsive/lee-events-wordmark-160.webp 160w,
+                                assets/responsive/lee-events-wordmark-264.webp 264w,
+                                assets/responsive/lee-events-wordmark-336.webp 336w,
+                                assets/responsive/lee-events-wordmark-480.webp 480w"><img
                         src="assets/lee-events-wordmark.png" alt="" width="1774" height="887">
                 </picture>
             </a><button class="hamburger" aria-label="Deschide meniul" aria-controls="menu"
@@ -631,7 +637,14 @@
             <div class="hero-shade"></div>
             <div class="shell hero-inner">
                 <picture class="wordmark-picture">
-                    <source type="image/webp" srcset="assets/lee-events-wordmark.webp"><img class="hero-wordmark"
+                    <source type="image/webp" sizes="(max-width: 676px) 230px, (max-width: 1235px) 34vw, 420px"
+                        srcset="assets/responsive/lee-events-wordmark-160.webp 160w,
+                                assets/responsive/lee-events-wordmark-264.webp 264w,
+                                assets/responsive/lee-events-wordmark-480.webp 480w,
+                                assets/responsive/lee-events-wordmark-640.webp 640w,
+                                assets/responsive/lee-events-wordmark-840.webp 840w,
+                                assets/responsive/lee-events-wordmark-1260.webp 1260w,
+                                assets/lee-events-wordmark.webp 1774w"><img class="hero-wordmark"
                         src="assets/lee-events-wordmark.png" alt="Lee Events" width="1774" height="887"
                         fetchpriority="high">
                 </picture>
@@ -671,7 +684,15 @@
         </section>
         <section class="section about" id="despre">
             <div class="shell about-grid about-grid-portrait">
-                <div class="about-photo"><img src="assets/dj-lee-portret.webp" alt="DJ Lee, portret cu controller DJ"
+                <div class="about-photo"><img src="assets/dj-lee-portret.webp"
+                        srcset="assets/responsive/dj-lee-portret-360.webp 360w,
+                                assets/responsive/dj-lee-portret-480.webp 480w,
+                                assets/responsive/dj-lee-portret-640.webp 640w,
+                                assets/responsive/dj-lee-portret-720.webp 720w,
+                                assets/dj-lee-portret.webp 900w"
+                        sizes="(max-width: 720px) calc(100vw - 34px), (max-width: 980px) 450px,
+                               (max-width: 1208px) max(360px, calc(38.54vw - 22px)), 440px"
+                        alt="DJ Lee, portret cu controller DJ"
                         draggable="false" loading="lazy" decoding="async" width="900" height="1348"></div>
                 <div class="about-copy"><span class="eyebrow">DESPRE LEE EVENTS</span>
                     <h2>Nu e doar despre muzică.<br>E despre <span class="title-accent">atmosferă.</span></h2>
@@ -1380,7 +1401,11 @@
                 <div class="footer-brand">
                     <a href="#acasa">
                         <picture class="wordmark-picture">
-                            <source type="image/webp" srcset="assets/lee-events-wordmark.webp"><img
+                            <source type="image/webp" sizes="160px"
+                        srcset="assets/responsive/lee-events-wordmark-160.webp 160w,
+                                assets/responsive/lee-events-wordmark-264.webp 264w,
+                                assets/responsive/lee-events-wordmark-336.webp 336w,
+                                assets/responsive/lee-events-wordmark-480.webp 480w"><img
                                 src="assets/lee-events-wordmark.png" alt="Lee Events" width="1774" height="887"
                                 loading="lazy">
                         </picture>

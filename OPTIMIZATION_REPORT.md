@@ -102,3 +102,57 @@ Capturile au aceleași dimensiuni la toate lățimile. Diferențele se limiteaz�
 - După editarea recenziilor, rulează `python3 tools/sync-reviews.py` și verifică textul static înainte de publicare.
 - Când înlocuiești o imagine, păstrează fișierul sursă, verifică dimensiunile și textele alternative și compară capturile la mobil și desktop. Menține thumbnail-urile locale pentru Instagram.
 - Prioritizează testarea manuală în Safari/iOS și Firefox, inclusiv cu cookie-uri terțe blocate. Rulează Lighthouse pe un preview apropiat de producție înainte de a decide dacă merită minificarea printr-un build separat, Critical CSS sau o politică CSP.
+
+---
+
+# Lighthouse Final Optimization — 27 noiembrie 2026
+
+## Referință și scop
+
+Rezultatele de producție furnizate în cerere pentru Chrome Guest Mode sunt Performance 96, Accessibility 100, Best Practices 81, SEO 100, FCP 1,1 s, LCP 2,8 s, Speed Index 1,1 s, TBT 0 ms, CLS 0,002 și răspuns de server 49 ms. Exportul Lighthouse complet nu a fost disponibil ca fișier în workspace. Comparația controlată de mai jos a fost măsurată independent, pe două copii locale ale aceleiași pagini, fără scripturile injectate de Cloudflare.
+
+## Schimbări și dimensiuni
+
+- `index.html` folosește `srcset` și `sizes` pentru logo în antet, hero și footer, cu fallback-ul PNG existent. Portretul are variante WebP responsive și își păstrează `loading="lazy"`, dimensiunile intrinseci și fișierul original ca rezervă. Logoul din hero rămâne eager, cu prioritate ridicată.
+- `assets/responsive/` conține 7 variante WebP lossless ale logoului (160–1260 px) și 4 variante WebP ale portretului (360–720 px). Originalele celor două imagini sunt păstrate. Varianta completă de 900 px a portretului poate fi aleasă pe ecrane dense, inclusiv când imaginea este decupată prin `object-fit: cover`.
+- `index.html` preîncarcă numai subseturile Latin (21.032 octeți) și Latin Extended (17.648 octeți) de Space Grotesk, folosite în sloganul LCP, inclusiv pentru diacritice. Cererile folosesc `crossorigin` și `fetchpriority="low"`. Prima probă CDP cu prioritatea implicită a întârziat CSS-ul în condiții de rețea limitată. Configurația cu prioritate redusă a fost cea verificată prin Lighthouse. Manrope, `unicode-range` și `font-display: swap` au rămas intacte. Sloganul este în HTML și stabilirea textului său nu depinde de JavaScript sau de o animație de intrare.
+- `styles.css` rămâne sincron și neschimbat. CSS-ul public este comprimat gzip. Nu s-a introdus încărcare asincronă sau Critical CSS. Fonturile publice sunt servite cu `max-age=0, must-revalidate`. S-a păstrat revalidarea URL-urilor fără amprentă, pentru actualizări sigure.
+- `OPTIMIZATION_REPORT.md` păstrează auditul anterior și înregistrează această rundă de verificări.
+
+Dimensiuni ale resurselor efectiv selectate în Lighthouse, în octeți:
+
+| Resursă | Înainte | Mobil după | Desktop după |
+| --- | ---: | ---: | ---: |
+| Logo hero | 172.820 | 19.016 | 19.016 |
+| Logo antet | Refolosea fișierul de mai sus | 7.408 | 3.684 |
+| Portret | 87.646 | 79.600 | 46.670 |
+| Totalul fișierelor de imagine din tabel | 260.466 | 106.024 | 69.370 |
+
+Totalul scade cu circa 59% pe mobil și 73% pe desktop în aceste configurații. Alegerile browserului pot varia cu DPR și dimensiunea ecranului. În testul separat CDP la 768 px/DPR 2, logoul din hero a ales 30.974 de octeți, iar portretul a păstrat originalul de 87.646 de octeți.
+
+## Lighthouse local, mediană din trei rulări înainte și trei după
+
+Lighthouse CLI 12.8.2, Chrome headless fără extensii, preset implicit mobil și preset desktop. Copiile au fost servite de pe loopback cu gzip pentru resursele text, în aceleași condiții pentru fiecare pereche. Node și Lighthouse au fost instalate într-un director temporar de test, în afara proiectului. Rulările locale nu includ CDN-ul, latența vizitatorilor sau scriptul de securitate Cloudflare. [Ghidul Chrome despre variația măsurătorilor Lighthouse](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-variability)
+
+| Indicator | Mobil înainte → după | Desktop înainte → după |
+| --- | ---: | ---: |
+| Performance | 94 → 99 | 100 → 100 |
+| Accessibility | 100 → 100 | 100 → 100 |
+| Best Practices | 100 → 100 | 100 → 100 |
+| SEO | 100 → 100 | 100 → 100 |
+| FCP | 1,50 → 1,35 s | 0,36 → 0,36 s |
+| LCP | 3,08 → 2,06 s | 0,70 → 0,47 s |
+| Speed Index | 1,50 → 1,35 s | 0,36 → 0,36 s |
+| TBT | 0 → 22 ms | 0 → 0 ms |
+| CLS | 0,00266 → 0,00144 | 0,00405 → 0,00133 |
+
+LCP a fost sub 2,5 s în măsurătorile finale locale. Rezultatele publice după publicare și datele reale Core Web Vitals rămân de verificat.
+
+## Regresii, SEO și limite
+
+- **Vizual.** Am comparat capturile înainte și după la 390, 768 și 1440 px. Coordonatele și dimensiunile celor trei imagini verificate au coincis în măsurătorile CDP. Variantele redimensionate pot avea diferențe fine de eșantionare a pixelilor. Nu am observat diferențe de încadrare sau poziție. Verificarea structurală a confirmat că HTML-ul este identic în afara atributelor de încărcare. CSS, JavaScript, texte, fonturi și dimensiuni au rămas intacte.
+- **Funcțional.** Au trecut înainte și după, la cele trei lățimi, navigarea, filtrele galeriei, lightbox-ul, revenirea focusului, comenzile recenziilor, FAQ-ul, preselectarea tipului de eveniment și compunerea mesajului WhatsApp. Instagram a fost simulat pentru testarea încărcării la cerere și a închiderii dialogului. Mesajul WhatsApp a fost interceptat local. Nu au apărut excepții JavaScript în fluxurile testate.
+- **SEO public și local.** Pagina, robots.txt și sitemapul public răspund 200. O cale inexistentă răspunde 404. Variantele HTTP, WWW și /index.html verificate redirecționează într-un singur pas spre HTTPS fără WWW. Sitemapul are o pagină canonică și nouă imagini, fără lastmod. Googlebot este permis. Nu s-au găsit directive noindex pe pagina principală. Titlul, meta description, Open Graph, canonicalul și graful JSON-LD au rămas intacte, iar cele 23 de întrebări FAQ sunt sincronizate.
+- **Cloudflare.** Avertismentul public `StorageType.persistent is deprecated` este atribuit în raportul furnizat scriptului injectat `/cdn-cgi/challenge-platform/scripts/jsd/main.js`. API-ul semnalat nu apare în codul propriu. Scorul Best Practices 100 local nu confirmă dispariția avertismentului în producție. Setările Cloudflare, DNS și email routing nu au fost modificate.
+- **Cross-browser.** Chrome macOS a fost testat, cu emulare mobil și tabletă. Safari WebDriver a refuzat sesiunea deoarece Remote Automation este dezactivat. Firefox, Edge, iOS Safari și Android Chrome nu au fost executate în acest mediu. Compatibilitatea pe dispozitive reale rămâne de verificat.
+- **Starea proiectului.** Nu s-a făcut commit, push sau deployment. Ștergerile preexistente ale celor nouă fișiere JPG din galerie au fost lăsate intacte. Site-ul folosește variantele WebP separate.
